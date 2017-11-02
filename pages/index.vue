@@ -1,6 +1,8 @@
 <template>
-  <section class="container">
-    <i class="fa fa-book" aria-hidden="true"></i> This is the new nuxt project.
+  <section class="section">
+    <div class="container">
+      This is the / page.
+    </div>
   </section>
 </template>
 
