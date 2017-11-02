@@ -16,6 +16,7 @@
     "@nuxtjs/bulma": "^1.0.3",
     "@nuxtjs/font-awesome": "^1.0.2",
     "@rafamaciel/firebase": "^1.0.0",
+    "bulma": "^0.6.0",
     "nuxt": "^1.0.0-rc11"
   },
   "devDependencies": {
