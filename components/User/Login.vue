@@ -1,10 +1,129 @@
 <template>
-  
+  <div class="modal" v-bind:class="{ 'is-active': showLogin }">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Login</p>
+        <button class="delete" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Email</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control is-expanded has-icons-left has-icons-right">
+                <input 
+                  class="input"
+                  v-bind:class="[
+                    { 'is-danger': $v.form.email.$error },
+                    { 'is-success': !$v.form.email.$error && !$v.form.email.$invalid }
+                  ]"
+                  type="email" 
+                  placeholder="Email"
+                  v-model="form.email"
+                  @input="$v.form.email.$touch()"
+                  @blur="$v.form.email.$touch()">
+                <span class="icon is-small is-left">
+                  <i class="fa fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right" v-if="!$v.form.email.$error && !$v.form.email.$invalid">
+                  <i class="fa fa-check"></i>
+                </span>
+              </p>
+              <p class="help is-danger" v-if="$v.form.email.$error">
+                {{ emailErrors[0] }}
+              </p>              
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Password</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control is-expanded has-icons-left">
+                <input 
+                  class="input"
+                  v-bind:class="[
+                    { 'is-danger': $v.form.password.$error },
+                    { 'is-success': !$v.form.password.$error && !$v.form.password.$invalid}
+                  ]"
+                  type="password" 
+                  placeholder="Password" 
+                  v-model="form.password"
+                  @input="$v.form.password.$touch()"
+                  @blur="$v.form.password.$touch()">
+                <span class="icon is-small is-left">
+                  <i class="fa fa-lock"></i>
+                </span>
+              </p>
+              <p class="help is-danger" v-if="$v.form.password.$error">
+                {{ passwordErrors[0] }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success">Save changes</button>
+        <button class="button">Cancel</button>
+      </footer>
+    </div>
+  </div>
 </template>
 
 <script>
-export default {
+import { mapGetters } from 'vuex'
+import { validationMixin } from 'vuelidate'
+import { required, email } from 'vuelidate/lib/validators'
+import * as types from '@/types'
 
+export default {
+  name: 'login',
+  mixins: [ validationMixin ],
+  props: [ 'showLogin' ],
+  data () {
+    return {
+      form: {
+        email: '',
+        password: ''
+      }
+    }
+  },
+  validations: {
+    form: {
+      email: {
+        required,
+        email
+      },
+      password: {
+        required
+      }
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getUser: types.USER,
+      getLoading: types.LOADING,
+      getError: types.ERROR
+    }),
+    emailErrors () {
+      const errors = []
+      if (!this.$v.form.email.$dirty) return errors
+      !this.$v.form.email.email && errors.push('Must be valid e-mail.')
+      !this.$v.form.email.required && errors.push('E-mail is required')
+      return errors
+    },
+    passwordErrors () {
+      const errors = []
+      if (!this.$v.form.password.$dirty) return errors
+      !this.$v.form.password.required && errors.push('Password is required.')
+      return errors
+    }
+  }
 }
 </script>
 
