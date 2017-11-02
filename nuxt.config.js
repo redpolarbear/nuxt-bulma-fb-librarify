@@ -3,7 +3,7 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'nuxt-bulma-fb-librarify',
+    title: 'Librarify - A World-wide Library',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1, shrink-to-fit=no' },
@@ -22,6 +22,9 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    vendor: [
+      'vuelidate'
+    ],
     /*
     ** Run ESLint on save
     */
@@ -60,5 +63,11 @@ module.exports = {
         messagingSenderId: '687212823219'
       }
     }
+  ],
+  /*
+  ** Plugins
+  */
+  plugins: [
+    '~/plugins/vuelidate'
   ]
 }
