@@ -17,7 +17,10 @@
     "@nuxtjs/font-awesome": "^1.0.2",
     "@rafamaciel/firebase": "^1.0.0",
     "bulma": "^0.6.0",
-    "nuxt": "^1.0.0-rc11"
+    "lodash": "^4.17.4",
+    "nuxt": "^1.0.0-rc11",
+    "shortid": "^2.2.8",
+    "vuelidate": "^0.6.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
