@@ -15,8 +15,9 @@
   "dependencies": {
     "@nuxtjs/bulma": "^1.0.3",
     "@nuxtjs/font-awesome": "^1.0.2",
-    "@rafamaciel/firebase": "^1.0.0",
     "bulma": "^0.6.0",
+    "firebase": "^4.6.1",
+    "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
     "nuxt": "^1.0.0-rc11",
     "shortid": "^2.2.8",

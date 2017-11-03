@@ -23,7 +23,8 @@ module.exports = {
   */
   build: {
     vendor: [
-      'vuelidate'
+      'vuelidate',
+      'firebase'
     ],
     /*
     ** Run ESLint on save
@@ -51,18 +52,7 @@ module.exports = {
   */
   modules: [
     '@nuxtjs/bulma',
-    '@nuxtjs/font-awesome',
-    {
-      src: '@rafamaciel/firebase',
-      options: {
-        apiKey: 'AIzaSyBp-VoO4yMdfcJjHeG8rCLYmlovp634-yY',
-        authDomain: 'vuejs-firebase-01-55b96.firebaseapp.com',
-        databaseURL: 'https://vuejs-firebase-01-55b96.firebaseio.com',
-        projectId: 'vuejs-firebase-01-55b96',
-        storageBucket: 'vuejs-firebase-01-55b96.appspot.com',
-        messagingSenderId: '687212823219'
-      }
-    }
+    '@nuxtjs/font-awesome'
   ],
   /*
   ** Plugins
