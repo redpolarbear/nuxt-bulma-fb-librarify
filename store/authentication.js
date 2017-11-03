@@ -120,8 +120,8 @@ export const actions = {
         // commit(types.SET_USER, state.userInfo)
         commit('SET_USER', rootGetters[types.USER_INFO])
       }
-      commit(types.SET_LOADING, false, { root: true })
       commit('TOGGLE_LOGIN_MODAL', false)
+      commit(types.SET_LOADING, false, { root: true })
       const successMessage = 'Login Successfully'
       commit(types.SET_SUCCESS, successMessage, { root: true })
     } catch (error) {
@@ -146,8 +146,8 @@ export const actions = {
           errorMessage = 'Unknown error occurred.'
           break
       }
-      commit(types.SET_LOADING, false, { root: true })
       commit('TOGGLE_LOGIN_MODAL', false)
+      commit(types.SET_LOADING, false, { root: true })
       commit(types.SET_ERROR, errorMessage, { root: true })
       console.log(error)
     }
