@@ -3,8 +3,8 @@
     <div class="modal-background"></div>
     <div class="modal-card" style="width: 548px;">
       <header class="modal-card-head">
-        <p class="modal-card-title">Login</p>
-        <button class="delete" aria-label="close"></button>
+        <p class="modal-card-title">Welcome to Librarify!</p>
+        <button class="delete" aria-label="close" @click="onCancel"></button>
       </header>
       <section class="modal-card-body">
         <div class="field is-horizontal">
@@ -31,6 +31,9 @@
                 <span class="icon is-small is-right" v-if="!$v.form.email.$error && !$v.form.email.$invalid">
                   <i class="fa fa-check"></i>
                 </span>
+                <span class="icon is-small is-right" v-if="$v.form.email.$error">
+                  <i class="fa fa-times"></i>
+                </span>
               </p>
               <p class="help is-danger" v-if="$v.form.email.$error">
                 {{ emailErrors[0] }}
@@ -44,13 +47,13 @@
           </div>
           <div class="field-body">
             <div class="field">
-              <p class="control is-expanded has-icons-left">
-                <input 
-                  class="input"
-                  v-bind:class="[
+              <p class="control is-expanded has-icons-left has-icons-right">
+                  <!-- v-bind:class="[
                     { 'is-danger': $v.form.password.$error },
                     { 'is-success': !$v.form.password.$error && !$v.form.password.$invalid}
-                  ]"
+                  ]" -->
+                <input 
+                  class="input"
                   type="password" 
                   placeholder="Password" 
                   v-model="form.password"
@@ -59,6 +62,12 @@
                 <span class="icon is-small is-left">
                   <i class="fa fa-lock"></i>
                 </span>
+                <!-- <span class="icon is-small is-right" v-if="!$v.form.password.$error && !$v.form.password.$invalid">
+                  <i class="fa fa-check"></i>
+                </span>
+                <span class="icon is-small is-right" v-if="$v.form.password.$error">
+                  <i class="fa fa-times"></i>
+                </span> -->
               </p>
               <p class="help is-danger" v-if="$v.form.password.$error">
                 {{ passwordErrors[0] }}
@@ -68,8 +77,8 @@
         </div>
       </section>
       <footer class="modal-card-foot is-inline-block has-text-right">
-        <button class="button is-success" @click="onLogin" >Login</button>
-        <button class="button is-right">Cancel</button>
+        <button class="button is-success" v-bind:class="{ 'is-loading': getLoading }" v-bind:disabled="$v.form.$invalid" @click="onLogin" >Login</button>
+        <button class="button is-right" @click="onCancel">Cancel</button>
       </footer>
     </div>
   </div>
@@ -125,14 +134,23 @@ export default {
     }
   },
   methods: {
-    onLogin () {
-      this.$store.dispatch(types.ACTION_USER_LOGIN_ASYNC, {email: this.form.email, password: this.form.password})
+    async onLogin () {
+      await this.$store.dispatch(types.ACTION_USER_LOGIN_ASYNC, {email: this.form.email, password: this.form.password})
+      this.resetLoginForm()
     },
     onCancel () {
+      this.resetLoginForm()
       this.$store.commit(types.TOGGLE_LOGIN_MODAL, false)
     },
     onDismissed () {
       this.$store.dispatch(types.CLEAR_ERROR)
+    },
+    resetLoginForm () {
+      this.form = {
+        email: '',
+        password: ''
+      }
+      this.$v.$reset()
     }
   }
 }
