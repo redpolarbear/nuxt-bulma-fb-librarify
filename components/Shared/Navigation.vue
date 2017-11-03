@@ -35,14 +35,23 @@
                 </a>
                 <div class="navbar-dropdown is-boxed">
                   <a class="navbar-item">
-                    My Profile
+                    <span class="icon">
+                      <i class="fa fa-user"></i>
+                    </span>
+                    <span>My Profile</span>
                   </a>
                   <a class="navbar-item">
-                    My Messages
+                    <span class="icon">
+                      <i class="fa fa-envelope"></i>
+                    </span>
+                    <span>My Messages</span>
                   </a>
                   <hr class="navbar-divider">
-                  <a class="navbar-item">
-                    Log Out
+                  <a class="navbar-item" @click="onLogout">
+                    <span class="icon">
+                      <i class="fa fa-sign-out"></i>
+                    </span>
+                    <span>Log Out</span>
                   </a>
               </div>             
             </div>
@@ -50,18 +59,12 @@
               <div class="field is-grouped">
                 <p class="control">
                   <a class="button is-small" @click="toggleLogin">
-                    <span class="icon">
-                      <i class="fa fa-sign-in" aria-hidden="true"></i>
-                    </span>
-                    <span>Log in</span>
+                    Log in
                   </a>
                 </p>
                 <p class="control">
                   <a class="button is-info is-small" @click="toggleSignup">
-                    <span class="icon">
-                      <i class="fa fa-user-plus" aria-hidden="true"></i>
-                    </span>
-                    <span>Sign Up</span>
+                    Sign Up
                   </a>
                 </p>
               </div>
@@ -122,6 +125,9 @@ export default {
     },
     toggleSignup: function () {
       this.$store.commit(types.TOGGLE_SIGNUP_MODAL, true)
+    },
+    onLogout () {
+      this.$store.dispatch(types.ACTION_USER_LOGOUT)
     }
   }
 }
