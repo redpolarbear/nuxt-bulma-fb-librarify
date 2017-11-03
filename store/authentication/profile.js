@@ -1,3 +1,4 @@
+import * as firebase from 'firebase'
 import shortid from 'shortid'
 import * as types from '@/types'
 
@@ -30,10 +31,10 @@ export const actions = {
     commit(types.CLEAR_ALL_MESSAGE, null, { root: true })
     try {
       // load the profile
-      const userProfile = this.$firebase.database().ref('usersProfile/' + id).once('value')
+      const userProfile = firebase.database().ref('usersProfile/' + id).once('value')
       // load the followings and the followers
-      const userFollowings = this.$firebase.database().ref('followings/' + id).once('value')
-      const userFollowers = this.$firebase.database().ref('followers/' + id).once('value')
+      const userFollowings = firebase.database().ref('followings/' + id).once('value')
+      const userFollowers = firebase.database().ref('followers/' + id).once('value')
       const values = await Promise.all([userProfile, userFollowings, userFollowers])
       // if the id is valid but the user does not exist, return null
       commit('SET_USER_INFO', values[0].val() ? {...(Object.assign({}, values[0].val())),

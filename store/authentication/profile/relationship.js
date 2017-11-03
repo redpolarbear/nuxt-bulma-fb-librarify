@@ -1,3 +1,4 @@
+import * as firebase from 'firebase'
 import shortid from 'shortid'
 import * as types from '@/types'
 
@@ -25,11 +26,11 @@ export const actions = {
     if (shortid.isValid(payload.id)) {
       try {
         // check if the user who is going to follow exists - db.ref('usersProfile').hasChild('payload.id')
-        const usersProfile = await this.$firebase.database().ref('usersProfile/' + payload.id).once('value')
+        const usersProfile = await firebase.database().ref('usersProfile/' + payload.id).once('value')
         // console.log(usersProfile.hasChild(payload.id))
         if (usersProfile.val()) {
-          const addFollowings = this.$firebase.database().ref('followings/' + rootGetters[types.USER].id).child(payload.id).set(true)
-          const addFollowers = this.$firebase.database().ref('followers/' + payload.id).child(rootGetters[types.USER].id).set(true)
+          const addFollowings = firebase.database().ref('followings/' + rootGetters[types.USER].id).child(payload.id).set(true)
+          const addFollowers = firebase.database().ref('followers/' + payload.id).child(rootGetters[types.USER].id).set(true)
           await Promise.all([addFollowings, addFollowers])
         }
       } catch (error) {
@@ -49,11 +50,11 @@ export const actions = {
     if (shortid.isValid(payload.id)) {
       try {
         // check if the user who is going to follow exists - db.ref('usersProfile').hasChild('payload.id')
-        const usersProfile = await this.$firebase.database().ref('usersProfile/' + payload.id).once('value')
+        const usersProfile = await firebase.database().ref('usersProfile/' + payload.id).once('value')
         // console.log(usersProfile.hasChild(payload.id))
         if (usersProfile.val()) {
-          const addFollowings = this.$firebase.database().ref('followings/' + rootGetters[types.USER].id).child(payload.id).set(null)
-          const addFollowers = this.$firebase.database().ref('followers/' + payload.id).child(rootGetters[types.USER].id).set(null)
+          const addFollowings = firebase.database().ref('followings/' + rootGetters[types.USER].id).child(payload.id).set(null)
+          const addFollowers = firebase.database().ref('followers/' + payload.id).child(rootGetters[types.USER].id).set(null)
           await Promise.all([addFollowings, addFollowers])
         }
       } catch (error) {
@@ -68,8 +69,8 @@ export const actions = {
   },
   RELATIONSHIP_CHECK ({commit, state}, payload) {
     try {
-      // const myFollowings = await this.$firebase.database().ref('followings/' + payload.authUserId + '/' + payload.id).once('value')
-      this.$firebase.database().ref('followings/' + payload.authUserId + '/' + payload.id).on('value', function (snapshot) {
+      // const myFollowings = await firebase.database().ref('followings/' + payload.authUserId + '/' + payload.id).once('value')
+      firebase.database().ref('followings/' + payload.authUserId + '/' + payload.id).on('value', function (snapshot) {
         commit('SET_IS_FOLLOWING', !!snapshot.val())
       })
     } catch (error) {

@@ -1,3 +1,4 @@
+import * as firebase from 'firebase'
 import _ from 'lodash'
 import * as types from '@/types'
 
@@ -36,7 +37,7 @@ export const actions = {
     commit(types.SET_LOADING, true, { root: true })
     commit(types.CLEAR_ALL_MESSAGE, null, { root: true })
     try {
-      const newUser = await this.$firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+      const newUser = await firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
       await newUser.updateProfile({
         displayName: payload.id,
         photoURL: payload.photoURL
@@ -47,36 +48,36 @@ export const actions = {
           uid: newUser.uid
         }
         // usersProfile update
-        this.$firebase.database().ref('usersProfile').child(payload.id).update({
+        firebase.database().ref('usersProfile').child(payload.id).update({
           ...user,
-          createdAt: this.$firebase.database.ServerValue.TIMESTAMP,
-          updatedAt: this.$firebase.database.ServerValue.TIMESTAMP
+          createdAt: firebase.database.ServerValue.TIMESTAMP,
+          updatedAt: firebase.database.ServerValue.TIMESTAMP
         })
         // create four default collections - reading, read, favorite, wishlist
-        const ReadingCollectionKey = this.$firebase.database().ref('userCollectionsBooks').child(payload.id).push().key
-        const ReadCollectionKey = this.$firebase.database().ref('userCollectionsBooks').child(payload.id).push().key
+        const ReadingCollectionKey = firebase.database().ref('userCollectionsBooks').child(payload.id).push().key
+        const ReadCollectionKey = firebase.database().ref('userCollectionsBooks').child(payload.id).push().key
         let defaultCollectionsUpdate = {}
         defaultCollectionsUpdate['userCollectionsBooks/' + payload.id + '/' + ReadingCollectionKey] = {
           name: 'My Reading Collection',
           uid: ReadingCollectionKey,
-          createdAt: this.$firebase.database.ServerValue.TIMESTAMP,
-          updatedAt: this.$firebase.database.ServerValue.TIMESTAMP
+          createdAt: firebase.database.ServerValue.TIMESTAMP,
+          updatedAt: firebase.database.ServerValue.TIMESTAMP
         }
         defaultCollectionsUpdate['userCollectionsBooks/' + payload.id + '/' + ReadCollectionKey] = {
           name: 'My Read Collection',
           uid: ReadCollectionKey,
-          createdAt: this.$firebase.database.ServerValue.TIMESTAMP,
-          updatedAt: this.$firebase.database.ServerValue.TIMESTAMP
+          createdAt: firebase.database.ServerValue.TIMESTAMP,
+          updatedAt: firebase.database.ServerValue.TIMESTAMP
         }
         defaultCollectionsUpdate['userFavoriteBooks/' + payload.id] = {
-          createdAt: this.$firebase.database.ServerValue.TIMESTAMP,
-          updatedAt: this.$firebase.database.ServerValue.TIMESTAMP
+          createdAt: firebase.database.ServerValue.TIMESTAMP,
+          updatedAt: firebase.database.ServerValue.TIMESTAMP
         }
         defaultCollectionsUpdate['userWishlistBooks/' + payload.id] = {
-          createdAt: this.$firebase.database.ServerValue.TIMESTAMP,
-          updatedAt: this.$firebase.database.ServerValue.TIMESTAMP
+          createdAt: firebase.database.ServerValue.TIMESTAMP,
+          updatedAt: firebase.database.ServerValue.TIMESTAMP
         }
-        this.$firebase.database().ref().update(defaultCollectionsUpdate)
+        firebase.database().ref().update(defaultCollectionsUpdate)
         await dispatch(types.ACTION_LOAD_USER_INFO_ASYNC, payload.id, { root: true })
         commit('SET_USER', rootGetters[types.USER_INFO])
       }
@@ -113,7 +114,7 @@ export const actions = {
     commit(types.SET_LOADING, true, { root: true })
     commit(types.CLEAR_ALL_MESSAGE, null, { root: true })
     try {
-      const user = await this.$firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+      const user = await firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
       if (user) {
         await dispatch(types.ACTION_LOAD_USER_INFO_ASYNC, user.displayName, { root: true })
         // commit(types.SET_USER, state.userInfo)
@@ -156,7 +157,7 @@ export const actions = {
     commit('SET_USER', rootGetters[types.USER_INFO])
   },
   USER_LOGOUT ({commit}) {
-    this.$firebase.auth().signOut()
+    firebase.auth().signOut()
     commit('SET_USER', null)
     commit(types.SET_USER_PROFILE, null, { root: true })
     commit(types.SET_USER_INFO, null, { root: true })
