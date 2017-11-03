@@ -1,7 +1,7 @@
 <template>
   <div class="modal" v-bind:class="{ 'is-active': showLogin }">
     <div class="modal-background"></div>
-    <div class="modal-card">
+    <div class="modal-card" style="width: 548px;">
       <header class="modal-card-head">
         <p class="modal-card-title">Login</p>
         <button class="delete" aria-label="close"></button>
@@ -67,9 +67,9 @@
           </div>
         </div>
       </section>
-      <footer class="modal-card-foot">
-        <button class="button is-success">Save changes</button>
-        <button class="button">Cancel</button>
+      <footer class="modal-card-foot is-inline-block has-text-right">
+        <button class="button is-success" @click="onLogin" >Login</button>
+        <button class="button is-right">Cancel</button>
       </footer>
     </div>
   </div>
@@ -122,6 +122,17 @@ export default {
       if (!this.$v.form.password.$dirty) return errors
       !this.$v.form.password.required && errors.push('Password is required.')
       return errors
+    }
+  },
+  methods: {
+    onLogin () {
+      this.$store.dispatch(types.ACTION_USER_LOGIN_ASYNC, {email: this.form.email, password: this.form.password})
+    },
+    onCancel () {
+      this.$store.commit(types.TOGGLE_LOGIN_MODAL, false)
+    },
+    onDismissed () {
+      this.$store.dispatch(types.CLEAR_ERROR)
     }
   }
 }

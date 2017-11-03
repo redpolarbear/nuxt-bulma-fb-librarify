@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar has-shadow" role="navigation">
+    <nav class="navbar has-shadow is-transparent" role="navigation">
       <div class="container">
         <div class="navbar-brand">
           <!-- <a class="navbar-item" href="https://bulma.io">
@@ -18,7 +18,7 @@
           </div>
           <div class="navbar-end">
             <!-- navbar items on the right -->
-            <router-link
+            <nuxt-link
               tag="a" 
               class="navbar-item is-tab" 
               v-for="item in menuItems" 
@@ -27,8 +27,26 @@
               active-class='is-active' 
               exact> 
                 <i class="fa" v-bind:class="item.icon"></i>&nbsp; {{ item.title }}
-            </router-link> <!-- default menu items -->
-            <div class="navbar-item">
+            </nuxt-link> <!-- default menu items -->
+            
+            <div class="navbar-item has-dropdown is-hoverable" v-if="userIsAuthenticated">
+                <a class="navbar-link">
+                  <img :src="getUser.photoURL" width="32px" height="32px">
+                </a>
+                <div class="navbar-dropdown is-boxed">
+                  <a class="navbar-item">
+                    My Profile
+                  </a>
+                  <a class="navbar-item">
+                    My Messages
+                  </a>
+                  <hr class="navbar-divider">
+                  <a class="navbar-item">
+                    Log Out
+                  </a>
+              </div>             
+            </div>
+            <div class="navbar-item" v-else>
               <div class="field is-grouped">
                 <p class="control">
                   <a class="button is-small" @click="toggleLogin">
@@ -47,7 +65,8 @@
                   </a>
                 </p>
               </div>
-            </div>          
+            </div>
+
           </div>
         </div>
       </div>
@@ -83,12 +102,18 @@ export default {
       getInfo: types.INFO
     }),
     menuItems () {
-      let menuItems = [
-        { icon: 'fa-book', title: 'Library', link: '/library' },
-        { icon: 'fa-bell-o', title: 'Moments', link: '/moments' },
-        { icon: 'fa-envelope', title: 'Messages', link: '/messages' }
-      ]
+      let menuItems = []
+      if (this.userIsAuthenticated) {
+        menuItems = [
+          { icon: 'fa-book', title: 'Library', link: '/library' },
+          { icon: 'fa-bell-o', title: 'Moments', link: '/moments' }
+          // { icon: 'fa-envelope', title: 'Messages', link: '/messages' }
+        ]
+      }
       return menuItems
+    },
+    userIsAuthenticated () {
+      return this.getUser !== null && this.getUser !== undefined
     }
   },
   methods: {
