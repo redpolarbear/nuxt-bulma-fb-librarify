@@ -31,7 +31,7 @@
             
             <div class="navbar-item has-dropdown is-hoverable" v-if="userIsAuthenticated">
                 <a class="navbar-link">
-                  <img :src="getUser.photoURL" width="32px" height="32px">
+                  <img :src="getUser.photoURL"> <!-- width: 28px; height: 28px; --> 
                 </a>
                 <div class="navbar-dropdown is-boxed">
                   <a class="navbar-item">
