@@ -58,13 +58,13 @@ export const actions = {
         const ReadCollectionKey = firebase.database().ref('userCollectionsBooks').child(payload.id).push().key
         let defaultCollectionsUpdate = {}
         defaultCollectionsUpdate['userCollectionsBooks/' + payload.id + '/' + ReadingCollectionKey] = {
-          name: 'My Reading Collection',
+          name: 'Reading Collection',
           uid: ReadingCollectionKey,
           createdAt: firebase.database.ServerValue.TIMESTAMP,
           updatedAt: firebase.database.ServerValue.TIMESTAMP
         }
         defaultCollectionsUpdate['userCollectionsBooks/' + payload.id + '/' + ReadCollectionKey] = {
-          name: 'My Read Collection',
+          name: 'Have Read Collection',
           uid: ReadCollectionKey,
           createdAt: firebase.database.ServerValue.TIMESTAMP,
           updatedAt: firebase.database.ServerValue.TIMESTAMP
@@ -81,8 +81,8 @@ export const actions = {
         await dispatch(types.ACTION_LOAD_USER_INFO_ASYNC, payload.id, { root: true })
         commit('SET_USER', rootGetters[types.USER_INFO])
       }
+      commit('TOGGLE_SIGNUP_MODAL', false) // close the modal before the loading stops
       commit(types.SET_LOADING, false, { root: true })
-      commit('TOGGLE_SIGNUP_MODAL', false)
       const successMessage = 'Signup Successfully'
       commit(types.SET_SUCCESS, successMessage, { root: true })
     } catch (error) {
@@ -104,8 +104,8 @@ export const actions = {
           errorMessage = 'Unknown error occurred.'
           break
       }
+      commit('TOGGLE_SIGNUP_MODAL', false) // close the modal before the loading stops
       commit(types.SET_LOADING, false, { root: true })
-      commit('TOGGLE_SIGNUP_MODAL', false)
       commit(types.SET_ERROR, errorMessage, { root: true })
       console.log(error)
     }
@@ -120,7 +120,7 @@ export const actions = {
         // commit(types.SET_USER, state.userInfo)
         commit('SET_USER', rootGetters[types.USER_INFO])
       }
-      commit('TOGGLE_LOGIN_MODAL', false)
+      commit('TOGGLE_LOGIN_MODAL', false) // close the modal before the loading stops
       commit(types.SET_LOADING, false, { root: true })
       const successMessage = 'Login Successfully'
       commit(types.SET_SUCCESS, successMessage, { root: true })
@@ -146,7 +146,7 @@ export const actions = {
           errorMessage = 'Unknown error occurred.'
           break
       }
-      commit('TOGGLE_LOGIN_MODAL', false)
+      commit('TOGGLE_LOGIN_MODAL', false) // close the modal before the loading stops
       commit(types.SET_LOADING, false, { root: true })
       commit(types.SET_ERROR, errorMessage, { root: true })
       console.log(error)
