@@ -26,7 +26,7 @@
                   <i class="fa fa-check"></i>
                 </span>
                 <span class="icon is-small is-right" v-if="$v.form.email.$error">
-                  <i class="fa fa-times"></i>
+                  <i class="fa fa-warning"></i>
                 </span>
               </p>
               <p class="help is-danger" v-if="$v.form.email.$error">
@@ -54,7 +54,7 @@
                   <i class="fa fa-check"></i>
                 </span>
                 <span class="icon is-small is-right" v-if="$v.form.password.$error">
-                  <i class="fa fa-times"></i>
+                  <i class="fa fa-warning"></i>
                 </span> -->
               </p>
               <p class="help is-danger" v-if="$v.form.password.$error">

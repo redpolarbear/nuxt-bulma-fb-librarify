@@ -26,7 +26,7 @@
                   <i class="fa fa-check"></i>
                 </span>
                 <span class="icon is-small is-right" v-else-if="$v.form.firstName.$error">
-                  <i class="fa fa-times"></i>
+                  <i class="fa fa-warning"></i>
                 </span>                
               </p>
               <p class="help is-danger" v-if="$v.form.firstName.$error">
@@ -50,7 +50,7 @@
                   <i class="fa fa-check"></i>
                 </span>
                 <span class="icon is-small is-right" v-else-if="$v.form.lastName.$error">
-                  <i class="fa fa-times"></i>
+                  <i class="fa fa-warning"></i>
                 </span>                
               </p>
               <p class="help is-danger" v-if="$v.form.lastName.$error">
@@ -78,7 +78,7 @@
                   <i class="fa fa-check"></i>
                 </span>
                 <span class="icon is-small is-right" v-else-if="$v.form.email.$error">
-                  <i class="fa fa-times"></i>
+                  <i class="fa fa-warning"></i>
                 </span>
               </p>
               <p class="help is-danger" v-if="$v.form.email.$error">
@@ -106,7 +106,7 @@
                   <i class="fa fa-check"></i>
                 </span>
                 <span class="icon is-small is-right" v-else-if="$v.form.password.$error">
-                  <i class="fa fa-times"></i>
+                  <i class="fa fa-warning"></i>
                 </span>
               </p>
               <p class="help is-danger" v-if="$v.form.password.$error">
@@ -134,7 +134,7 @@
                   <i class="fa fa-check"></i>
                 </span>
                 <span class="icon is-small is-right" v-else-if="$v.form.confirmPassword.$error">
-                  <i class="fa fa-times"></i>
+                  <i class="fa fa-warning"></i>
                 </span>
               </p>
               <p class="help is-danger" v-if="$v.form.confirmPassword.$error">
