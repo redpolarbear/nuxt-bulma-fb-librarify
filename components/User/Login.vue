@@ -10,7 +10,7 @@
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
-              <p class="control is-expanded has-icons-left has-icons-right">
+              <p class="control is-expanded has-icons-right">
                 <input 
                   class="input"
                   v-bind:class="[
@@ -22,9 +22,6 @@
                   v-model="form.email"
                   @input="$v.form.email.$touch()"
                   @blur="$v.form.email.$touch()">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-envelope"></i>
-                </span>
                 <span class="icon is-small is-right" v-if="!$v.form.email.$error && !$v.form.email.$invalid">
                   <i class="fa fa-check"></i>
                 </span>
@@ -41,7 +38,7 @@
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
-              <p class="control is-expanded has-icons-left has-icons-right">
+              <p class="control is-expanded has-icons-right">
                   <!-- v-bind:class="[
                     { 'is-danger': $v.form.password.$error },
                     { 'is-success': !$v.form.password.$error && !$v.form.password.$invalid}
@@ -53,9 +50,6 @@
                   v-model="form.password"
                   @input="$v.form.password.$touch()"
                   @blur="$v.form.password.$touch()">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-lock"></i>
-                </span>
                 <!-- <span class="icon is-small is-right" v-if="!$v.form.password.$error && !$v.form.password.$invalid">
                   <i class="fa fa-check"></i>
                 </span>
@@ -71,8 +65,8 @@
         </div>
       </section>
       <footer class="modal-card-foot is-inline-block has-text-right">
-        <button class="button is-success" v-bind:class="{ 'is-loading': getLoading }" v-bind:disabled="$v.form.$invalid" @click="onLogin" >Login</button>
         <button class="button is-right" @click="onCancel">Cancel</button>
+        <button class="button is-success" v-bind:class="{ 'is-loading': getLoading }" v-bind:disabled="$v.form.$invalid" @click="onLogin" >Login</button>
       </footer>
     </div>
   </div>

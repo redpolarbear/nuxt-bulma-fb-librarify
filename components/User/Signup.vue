@@ -10,30 +10,51 @@
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
-              <p class="control is-expanded has-icons-left has-icons-right">
+              <p class="control is-expanded has-icons-right">
                 <input 
                   class="input"
                   v-bind:class="[
-                    { 'is-danger': $v.form.name.$error },
-                    { 'is-success': !$v.form.name.$error && !$v.form.name.$invalid }
+                    { 'is-danger': $v.form.firstName.$error },
+                    { 'is-success': !$v.form.firstName.$error && !$v.form.firstName.$invalid }
                   ]"
                   type="text" 
-                  placeholder="Name"
-                  v-model="form.name"
-                  @input="$v.form.name.$touch()"
-                  @blur="$v.form.name.$touch()">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-user"></i>
-                </span>
-                <span class="icon is-small is-right" v-if="!$v.form.name.$error && !$v.form.name.$invalid">
+                  placeholder="First Name"
+                  v-model="form.firstName"
+                  @input="$v.form.firstName.$touch()"
+                  @blur="$v.form.firstName.$touch()">
+                <span class="icon is-small is-right" v-if="!$v.form.firstName.$error && !$v.form.firstName.$invalid">
                   <i class="fa fa-check"></i>
                 </span>
-                <span class="icon is-small is-right" v-else-if="$v.form.name.$error">
+                <span class="icon is-small is-right" v-else-if="$v.form.firstName.$error">
                   <i class="fa fa-times"></i>
                 </span>                
               </p>
-              <p class="help is-danger" v-if="$v.form.name.$error">
-                {{ nameErrors[0] }}
+              <p class="help is-danger" v-if="$v.form.firstName.$error">
+                {{ firstNameErrors[0] }}
+              </p>              
+            </div>
+            <div class="field">
+              <p class="control is-expanded has-icons-right">
+                <input 
+                  class="input"
+                  v-bind:class="[
+                    { 'is-danger': $v.form.lastName.$error },
+                    { 'is-success': !$v.form.lastName.$error && !$v.form.lastName.$invalid }
+                  ]"
+                  type="text" 
+                  placeholder="Last Name"
+                  v-model="form.lastName"
+                  @input="$v.form.lastName.$touch()"
+                  @blur="$v.form.lastName.$touch()">
+                <span class="icon is-small is-right" v-if="!$v.form.lastName.$error && !$v.form.lastName.$invalid">
+                  <i class="fa fa-check"></i>
+                </span>
+                <span class="icon is-small is-right" v-else-if="$v.form.lastName.$error">
+                  <i class="fa fa-times"></i>
+                </span>                
+              </p>
+              <p class="help is-danger" v-if="$v.form.lastName.$error">
+                {{ lastNameErrors[0] }}
               </p>              
             </div>
           </div>
@@ -41,7 +62,7 @@
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
-              <p class="control is-expanded has-icons-left has-icons-right">
+              <p class="control is-expanded has-icons-right">
                 <input 
                   class="input"
                   v-bind:class="[
@@ -53,9 +74,6 @@
                   v-model="form.email"
                   @input="$v.form.email.$touch()"
                   @blur="$v.form.email.$touch()">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-envelope"></i>
-                </span>
                 <span class="icon is-small is-right" v-if="!$v.form.email.$error && !$v.form.email.$invalid">
                   <i class="fa fa-check"></i>
                 </span>
@@ -72,7 +90,7 @@
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
-              <p class="control is-expanded has-icons-left has-icons-right">
+              <p class="control is-expanded has-icons-right">
                 <input 
                   class="input"
                   v-bind:class="[
@@ -84,9 +102,6 @@
                   v-model="form.password"
                   @input="$v.form.password.$touch()"
                   @blur="$v.form.password.$touch()">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-lock"></i>
-                </span>
                 <span class="icon is-small is-right" v-if="!$v.form.password.$error && !$v.form.password.$invalid">
                   <i class="fa fa-check"></i>
                 </span>
@@ -103,7 +118,7 @@
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
-              <p class="control is-expanded has-icons-left has-icons-right">
+              <p class="control is-expanded has-icons-right">
                 <input 
                   class="input"
                   v-bind:class="[
@@ -115,9 +130,6 @@
                   v-model="form.confirmPassword"
                   @input="$v.form.confirmPassword.$touch()"
                   @blur="$v.form.confirmPassword.$touch()">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-lock"></i>
-                </span>
                 <span class="icon is-small is-right" v-if="!$v.form.confirmPassword.$error && !$v.form.confirmPassword.$invalid">
                   <i class="fa fa-check"></i>
                 </span>
@@ -133,8 +145,8 @@
         </div>
       </section>
       <footer class="modal-card-foot is-inline-block has-text-right">
-        <button class="button is-success" v-bind:class="{ 'is-loading': getLoading }" v-bind:disabled="$v.form.$invalid" @click="onSignup">Sign Up</button>
         <button class="button is-right" @click="onCancel">Cancel</button>
+        <button class="button is-success" v-bind:class="{ 'is-loading': getLoading }" v-bind:disabled="$v.form.$invalid" @click="onSignup">Sign Up</button>
       </footer>
     </div>
   </div>
@@ -155,7 +167,12 @@ export default {
   mixins: [validationMixin],
   validations: {
     form: {
-      name: {
+      firstName: {
+        required,
+        minLength: minLength(3),
+        maxLength: maxLength(15)
+      },
+      lastName: {
         required,
         minLength: minLength(3),
         maxLength: maxLength(15)
@@ -178,7 +195,8 @@ export default {
   data () {
     return {
       form: {
-        name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
         confirmPassword: ''
@@ -190,12 +208,20 @@ export default {
       getUser: types.USER,
       getLoading: types.LOADING
     }),
-    nameErrors () {
+    firstNameErrors () {
       const errors = []
-      if (!this.$v.form.name.$dirty) return errors
-      !this.$v.form.name.maxLength && errors.push(`Name must be at most ${this.$v.form.name.$params.maxLength.max} characters long.`)
-      !this.$v.form.name.minLength && errors.push(`Name must be at least ${this.$v.form.name.$params.minLength.min} characters long.`)
-      !this.$v.form.name.required && errors.push('Name is required.')
+      if (!this.$v.form.firstName.$dirty) return errors
+      !this.$v.form.firstName.maxLength && errors.push(`First Name must be at most ${this.$v.form.firstName.$params.maxLength.max} characters long.`)
+      !this.$v.form.firstName.minLength && errors.push(`First Name must be at least ${this.$v.form.firstName.$params.minLength.min} characters long.`)
+      !this.$v.form.firstName.required && errors.push('First Name is required.')
+      return errors
+    },
+    lastNameErrors () {
+      const errors = []
+      if (!this.$v.form.lastName.$dirty) return errors
+      !this.$v.form.lastName.maxLength && errors.push(`Last Name must be at most ${this.$v.form.lastName.$params.maxLength.max} characters long.`)
+      !this.$v.form.lastName.minLength && errors.push(`Last Name must be at least ${this.$v.form.lastName.$params.minLength.min} characters long.`)
+      !this.$v.form.lastName.required && errors.push('Last Name is required.')
       return errors
     },
     emailErrors () {
