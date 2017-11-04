@@ -1,16 +1,13 @@
 <template>
   <div class="modal" v-bind:class="{ 'is-active': showSignup }">
     <div class="modal-background"></div>
-    <div class="modal-card" style="width: 548px;">
+    <div class="modal-card" style="width: 427px;">
       <header class="modal-card-head">
         <p class="modal-card-title">Sign Up</p>
         <button class="delete" aria-label="close" @click="onCancel"></button>
       </header>
       <section class="modal-card-body">
         <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">Name</label>
-          </div>
           <div class="field-body">
             <div class="field">
               <p class="control is-expanded has-icons-left has-icons-right">
@@ -42,9 +39,6 @@
           </div>
         </div>
         <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">Email</label>
-          </div>
           <div class="field-body">
             <div class="field">
               <p class="control is-expanded has-icons-left has-icons-right">
@@ -76,9 +70,6 @@
           </div>
         </div>
         <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">Password</label>
-          </div>
           <div class="field-body">
             <div class="field">
               <p class="control is-expanded has-icons-left has-icons-right">
@@ -110,9 +101,6 @@
           </div>
         </div>
         <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">Confirm Password</label>
-          </div>
           <div class="field-body">
             <div class="field">
               <p class="control is-expanded has-icons-left has-icons-right">

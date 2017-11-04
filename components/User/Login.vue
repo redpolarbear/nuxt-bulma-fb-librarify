@@ -1,16 +1,13 @@
 <template>
   <div class="modal" v-bind:class="{ 'is-active': showLogin }">
     <div class="modal-background"></div>
-    <div class="modal-card" style="width: 548px;">
+    <div class="modal-card" style="width: 427px;">
       <header class="modal-card-head">
         <p class="modal-card-title">Welcome to Librarify!</p>
         <button class="delete" aria-label="close" @click="onCancel"></button>
       </header>
       <section class="modal-card-body">
         <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">Email</label>
-          </div>
           <div class="field-body">
             <div class="field">
               <p class="control is-expanded has-icons-left has-icons-right">
@@ -21,7 +18,7 @@
                     { 'is-success': !$v.form.email.$error && !$v.form.email.$invalid }
                   ]"
                   type="email" 
-                  placeholder="Email"
+                  placeholder="Your Email"
                   v-model="form.email"
                   @input="$v.form.email.$touch()"
                   @blur="$v.form.email.$touch()">
@@ -42,9 +39,6 @@
           </div>
         </div>
         <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">Password</label>
-          </div>
           <div class="field-body">
             <div class="field">
               <p class="control is-expanded has-icons-left has-icons-right">
@@ -55,7 +49,7 @@
                 <input 
                   class="input"
                   type="password" 
-                  placeholder="Password" 
+                  placeholder="Your Password" 
                   v-model="form.password"
                   @input="$v.form.password.$touch()"
                   @blur="$v.form.password.$touch()">
