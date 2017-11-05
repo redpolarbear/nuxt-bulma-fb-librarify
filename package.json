@@ -15,7 +15,7 @@
   },
   "engines": {
     "node": "6.11.3",
-    "npm": "3.10.10"
+    "npm": "5.5.1"
   },
   "dependencies": {
     "@nuxtjs/bulma": "^1.0.3",
