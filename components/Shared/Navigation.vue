@@ -104,6 +104,9 @@ export default {
       getSuccess: types.SUCCESS,
       getInfo: types.INFO
     }),
+    userIsAuthenticated () {
+      return this.getUser !== null && this.getUser !== undefined
+    },
     menuItems () {
       let menuItems = []
       if (this.userIsAuthenticated) {
@@ -114,9 +117,6 @@ export default {
         ]
       }
       return menuItems
-    },
-    userIsAuthenticated () {
-      return this.getUser !== null && this.getUser !== undefined
     }
   },
   methods: {
