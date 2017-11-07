@@ -58,22 +58,26 @@ export const actions = {
         const ReadCollectionKey = firebase.database().ref('userCollectionsBooks').child(payload.id).push().key
         let defaultCollectionsUpdate = {}
         defaultCollectionsUpdate['userCollectionsBooks/' + payload.id + '/' + ReadingCollectionKey] = {
-          name: 'Reading Collection',
-          uid: ReadingCollectionKey,
           createdAt: firebase.database.ServerValue.TIMESTAMP,
+          name: 'My Reading Collection',
+          slug: 'my-reading-collection',
+          uid: ReadingCollectionKey,
           updatedAt: firebase.database.ServerValue.TIMESTAMP
         }
         defaultCollectionsUpdate['userCollectionsBooks/' + payload.id + '/' + ReadCollectionKey] = {
-          name: 'Have Read Collection',
-          uid: ReadCollectionKey,
           createdAt: firebase.database.ServerValue.TIMESTAMP,
+          name: 'My Have Read Collection',
+          slug: 'my-have-read-collection',
+          uid: ReadCollectionKey,
           updatedAt: firebase.database.ServerValue.TIMESTAMP
         }
         defaultCollectionsUpdate['userFavoriteBooks/' + payload.id] = {
+          slug: 'my-favorites',
           createdAt: firebase.database.ServerValue.TIMESTAMP,
           updatedAt: firebase.database.ServerValue.TIMESTAMP
         }
         defaultCollectionsUpdate['userWishlistBooks/' + payload.id] = {
+          slug: 'my-wishlist',
           createdAt: firebase.database.ServerValue.TIMESTAMP,
           updatedAt: firebase.database.ServerValue.TIMESTAMP
         }
