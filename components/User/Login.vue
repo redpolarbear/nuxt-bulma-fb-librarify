@@ -103,7 +103,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getUser: types.USER,
+      // getUser: types.USER,
       getLoading: types.LOADING,
       getError: types.ERROR
     }),
