@@ -7,6 +7,7 @@
         <button class="delete" aria-label="close" @click="onCancel"></button>
       </header>
       <section class="modal-card-body">
+        <!-- START: first name and last name inputs -->
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
@@ -59,6 +60,8 @@
             </div>
           </div>
         </div>
+        <!-- END: first name and last name inputs -->
+        <!-- START: email inputs -->
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
@@ -87,6 +90,8 @@
             </div>
           </div>
         </div>
+        <!-- END: email inputs -->
+        <!-- START: password inputs -->
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
@@ -115,6 +120,8 @@
             </div>
           </div>
         </div>
+        <!-- END: password inputs -->
+        <!-- START: confirm password inputs -->
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
@@ -143,6 +150,7 @@
             </div>
           </div>
         </div>
+        <!-- END: confirm password inputs -->
       </section>
       <footer class="modal-card-foot is-inline-block has-text-right">
         <button class="button is-right" @click="onCancel">Cancel</button>
