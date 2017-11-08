@@ -72,12 +72,14 @@ export const actions = {
           updatedAt: firebase.database.ServerValue.TIMESTAMP
         }
         defaultCollectionsUpdate['userFavoriteBooks/' + payload.id] = {
-          slug: 'my-favorites',
+          slug: 'my-favorite',
+          name: 'My Favorite',
           createdAt: firebase.database.ServerValue.TIMESTAMP,
           updatedAt: firebase.database.ServerValue.TIMESTAMP
         }
         defaultCollectionsUpdate['userWishlistBooks/' + payload.id] = {
           slug: 'my-wishlist',
+          name: 'My Wishlist',
           createdAt: firebase.database.ServerValue.TIMESTAMP,
           updatedAt: firebase.database.ServerValue.TIMESTAMP
         }
