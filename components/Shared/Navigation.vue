@@ -126,8 +126,9 @@ export default {
     toggleSignup: function () {
       this.$store.commit(types.TOGGLE_SIGNUP_MODAL, true)
     },
-    onLogout () {
-      this.$store.dispatch(types.ACTION_USER_LOGOUT)
+    async onLogout () {
+      await this.$store.dispatch(types.ACTION_USER_LOGOUT)
+      this.$router.push('/')
     }
   }
 }
