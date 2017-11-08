@@ -15,7 +15,9 @@ export const IS_FOLLOWING = 'authentication/profile/relationship/GET_IS_FOLLOWIN
 
 export const BOOK_INFO = 'library/book/GET_BOOK_INFO'
 
-export const COLLECTIONS = 'mybookshelf/GET_COLLECTIONS'
+export const COLLECTIONS = 'mybookshelf/GET_COLLECTIONS' // OK
+export const FAVORITE = 'mybookshelf/GET_FAVORITE' // OK
+export const WISHLIST = 'mybookshelf/GET_WISHLIST' // OK
 // export const ADDING_LOCK = 'mybookshelf/GET_ADDING_LOCK'
 export const GET_COLLECTION_BY_NAME = 'mybookshelf/GET_COLLECTION_BY_NAME'
 
@@ -67,7 +69,10 @@ export const ACTION_SEARCH_BOOK_BY_ISBN_ASYNC = 'library/book/SEARCH_BOOK_BY_ISB
 export const ACTION_SEARCH_BOOK_BY_ISBN_IN_FB_ASYNC = 'library/book/SEARCH_BOOK_BY_ISBN_IN_FB_ASYNC'
 export const ACTION_SAVE_BOOK_INFO_INTO_FB_ASYNC = 'library/book/SAVE_BOOK_INFO_INTO_FB_ASYNC'
 
-export const ACTION_LOAD_COLLECTIONS_ASYNC = 'mybookshelf/LOAD_COLLECTIONS_ASYNC'
+export const ACTION_LOAD_COLLECTIONS_ASYNC = 'mybookshelf/LOAD_COLLECTIONS_ASYNC' // OK
 export const ACTION_SAVE_ONE_COLLECTION_INTO_FB = 'mybookshelf/SAVE_ONE_COLLECTION_INTO_FB'
 export const ACTION_REMOVE_ONE_COLLECTION_FROM_FB = 'mybookshelf/REMOVE_ONE_COLLECTION_FROM_FB'
 export const ACTION_SAVE_THE_BOOK_INTO_COLLECTION_IN_FB = 'mybookshelf/SAVE_THE_BOOK_INTO_COLLECTION_IN_FB'
+
+export const ACTION_LOAD_FAVORITE_ASYNC = 'mybookshelf/LOAD_FAVORITE_ASYNC' // OK
+export const ACTION_LOAD_WISHLIST_ASYNC = 'mybookshelf/LOAD_WISHLIST_ASYNC' // OK
