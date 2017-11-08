@@ -1,4 +1,4 @@
-import * as firebase from 'firebase'
+import firebase from '@/firebaseInit'
 import shortid from 'shortid'
 import * as types from '@/types'
 
