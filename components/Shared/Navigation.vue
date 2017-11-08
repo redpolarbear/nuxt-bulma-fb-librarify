@@ -112,8 +112,8 @@ export default {
       if (this.userIsAuthenticated) {
         menuItems = [
           { icon: 'fa-book', title: 'Library', link: '/library' },
-          { icon: 'fa-bell-o', title: 'Moments', link: '/moments' }
-          // { icon: 'fa-envelope', title: 'Messages', link: '/messages' }
+          { icon: 'fa-bell-o', title: 'Moments', link: '/moments' },
+          { icon: 'fa-envelope', title: 'Bookshelf', link: '/my-bookshelf' }
         ]
       }
       return menuItems

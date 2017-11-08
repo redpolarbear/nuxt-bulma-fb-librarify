@@ -61,14 +61,11 @@ export default {
       getUser: types.USER
     })
   },
-  watch: {
-    getUser: async function (value) {
-      if (value) {
-        await this.$store.dispatch(types.ACTION_LOAD_COLLECTIONS_ASYNC)
-        await this.$store.dispatch(types.ACTION_LOAD_FAVORITE_ASYNC)
-        await this.$store.dispatch(types.ACTION_LOAD_WISHLIST_ASYNC)
-      }
-    }
+  async created () {
+    const myCollections = this.$store.dispatch(types.ACTION_LOAD_COLLECTIONS_ASYNC)
+    const myFavorite = this.$store.dispatch(types.ACTION_LOAD_FAVORITE_ASYNC)
+    const myWishlist = this.$store.dispatch(types.ACTION_LOAD_WISHLIST_ASYNC)
+    await Promise.all([myCollections, myFavorite, myWishlist])
   }
 }
 </script>

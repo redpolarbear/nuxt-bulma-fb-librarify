@@ -1,4 +1,4 @@
-import * as firebase from 'firebase'
+import firebase from '@/firebaseInit'
 import _ from 'lodash'
 import * as types from '@/types'
 
@@ -159,8 +159,17 @@ export const actions = {
     }
   },
   async AUTO_SIGNIN ({commit, dispatch, rootGetters}, payload) {
-    await dispatch(types.ACTION_LOAD_USER_INFO_ASYNC, payload.displayName, { root: true })
-    commit('SET_USER', rootGetters[types.USER_INFO])
+    // if (payload.displayName !== null) {
+    try {
+      console.log(payload.displayName)
+      await dispatch(types.ACTION_LOAD_USER_INFO_ASYNC, payload.displayName, { root: true })
+      commit('SET_USER', rootGetters[types.USER_INFO])
+      commit('SET_USER', null)
+    } catch (error) {
+      console.log(error)
+    }
+    // } else {
+    // }
   },
   USER_LOGOUT ({commit}) {
     firebase.auth().signOut()
