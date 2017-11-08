@@ -159,17 +159,14 @@ export const actions = {
     }
   },
   async AUTO_SIGNIN ({commit, dispatch, rootGetters}, payload) {
-    // if (payload.displayName !== null) {
     try {
-      console.log(payload.displayName)
-      await dispatch(types.ACTION_LOAD_USER_INFO_ASYNC, payload.displayName, { root: true })
-      commit('SET_USER', rootGetters[types.USER_INFO])
-      commit('SET_USER', null)
+      if (payload) {
+        await dispatch(types.ACTION_LOAD_USER_INFO_ASYNC, payload.displayName, { root: true })
+      }
+      commit('SET_USER', payload ? rootGetters[types.USER_INFO] : null)
     } catch (error) {
       console.log(error)
     }
-    // } else {
-    // }
   },
   USER_LOGOUT ({commit}) {
     firebase.auth().signOut()
