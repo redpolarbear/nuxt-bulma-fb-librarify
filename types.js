@@ -42,6 +42,10 @@ export const SET_IS_FOLLOWING = 'authentication/profile/relationship/SET_IS_FOLL
 
 export const SET_BOOK_INFO = 'library/book/SET_BOOK_INFO'
 
+export const SET_COLLECTIONS = 'mybookshelf/SET_COLLECTIONS' // OK
+export const SET_FAVORITE = 'mybookshelf/SET_FAVORITE' // OK
+export const SET_WISHLIST = 'mybookshelf/SET_WISHLIST' // OK
+
 export const ADD_ONE_EMPTY_COLLECTION = 'mybookshelf/ADD_ONE_EMPTY_COLLECTION'
 export const REMOVE_ONE_COLLECTION = 'mybookshelf/REMOVE_ONE_COLLECTION'
 export const UPDATE_ONE_COLLECTION = 'mybookshelf/UPDATE_ONE_COLLECTION'
