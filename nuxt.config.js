@@ -14,6 +14,7 @@ module.exports = {
     //   { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     // ]
   },
+  mode: 'spa',
   /*
   ** Customize the progress bar color
   */
@@ -58,6 +59,10 @@ module.exports = {
   ** Plugins
   */
   plugins: [
-    '~/plugins/vuelidate'
-  ]
+    '~/plugins/vuelidate',
+    '~/plugins/fireauth'
+  ],
+  router: {
+    middleware: 'router-auth'
+  }
 }
