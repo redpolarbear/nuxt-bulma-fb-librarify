@@ -4,29 +4,11 @@
       <div class="columns">
         <!-- START: aside menu column -->
         <div class="column is-3">
-          <aside class="menu">
-            <p class="menu-label">
-              I'M HAVING...
-            </p>
-            <ul class="menu-list">
-              <li>
-                <a class="is-active">My Collections</a>
-                <ul>
-                  <li>
-                    <nuxt-link to="/my-bookshelf/my-reading-collection">My Reading Collection</nuxt-link>
-                  </li>
-                  <li><a href="">My Have Read Collection</a></li>
-                  <li><a href="">My 80's Reads</a></li>
-                </ul>
-              </li>
-            </ul>
-            <p class="menu-label">
-              I'M BORROWING...
-            </p>
-            <p class="menu-label">
-              I'M LOOKING FOR...
-            </p>
-          </aside>
+          <app-my-bookshelf-menu
+            :myCollections="getCollections"
+            :myFavorite="getFavorite"
+            :myWishlist="getWishlist">
+          </app-my-bookshelf-menu>
         </div>
         <!-- END: aside menu column -->
         <div class="column is-9">
@@ -34,11 +16,6 @@
             <nav class="level">
               <!-- Left side -->
               <div class="level-left">
-                <div class="level-item">
-                  <p class="subtitle is-5">
-                    <strong>123</strong> collections
-                  </p>
-                </div>
                 <div class="level-item">
                   <div class="field has-addons">
                     <p class="control">
@@ -54,15 +31,11 @@
               </div>
               <!-- Right side -->
               <div class="level-right">
-                <p class="level-item"><strong>All</strong></p>
-                <p class="level-item"><a>Published</a></p>
-                <p class="level-item"><a>Drafts</a></p>
-                <p class="level-item"><a>Deleted</a></p>
                 <p class="level-item"><a class="button is-success">New</a></p>
               </div>
             </nav>
           </div>
-          <nuxt-child/>
+          <nuxt-child />
         </div>
       </div>
     </div>
@@ -70,8 +43,33 @@
 </template>
 
 <script>
-export default {
+import { mapGetters } from 'vuex'
+// import localStorage from 'localStorage'
+import * as types from '@/types'
+import MyBookShelfMenuComponent from '@/components/MyBookShelf/Menu'
 
+export default {
+  name: 'mybookshelf',
+  components: {
+    'app-my-bookshelf-menu': MyBookShelfMenuComponent
+  },
+  computed: {
+    ...mapGetters({
+      getCollections: types.COLLECTIONS,
+      getFavorite: types.FAVORITE,
+      getWishlist: types.WISHLIST,
+      getUser: types.USER
+    })
+  },
+  watch: {
+    getUser: async function (value) {
+      if (value) {
+        await this.$store.dispatch(types.ACTION_LOAD_COLLECTIONS_ASYNC)
+        await this.$store.dispatch(types.ACTION_LOAD_FAVORITE_ASYNC)
+        await this.$store.dispatch(types.ACTION_LOAD_WISHLIST_ASYNC)
+      }
+    }
+  }
 }
 </script>
 
