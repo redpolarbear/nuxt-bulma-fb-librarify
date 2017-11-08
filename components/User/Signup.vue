@@ -261,7 +261,7 @@ export default {
         id: shortid.generate(),
         firstName: this.form.firstName,
         lastName: this.form.lastName,
-        displayName: this.form.firstname + ' ' + this.form.lastName,
+        displayName: this.form.firstName + ' ' + this.form.lastName,
         email: this.form.email,
         password: this.form.password,
         photoURL: `https://www.gravatar.com/avatar/${md5((this.form.email.trim()).toLowerCase())}?d=mm&s=200`,
