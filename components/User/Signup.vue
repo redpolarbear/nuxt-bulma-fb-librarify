@@ -177,12 +177,12 @@ export default {
     form: {
       firstName: {
         required,
-        minLength: minLength(3),
+        minLength: minLength(2),
         maxLength: maxLength(15)
       },
       lastName: {
         required,
-        minLength: minLength(3),
+        minLength: minLength(2),
         maxLength: maxLength(15)
       },
       email: {
@@ -259,7 +259,9 @@ export default {
     async onSignup () {
       const defaultUserProfile = {
         id: shortid.generate(),
-        displayName: this.form.name,
+        firstName: this.form.firstName,
+        lastName: this.form.lastName,
+        displayName: this.form.firstname + ' ' + this.form.lastName,
         email: this.form.email,
         password: this.form.password,
         photoURL: `https://www.gravatar.com/avatar/${md5((this.form.email.trim()).toLowerCase())}?d=mm&s=200`,
