@@ -53,6 +53,12 @@ export default {
   components: {
     'app-my-bookshelf-menu': MyBookShelfMenuComponent
   },
+  async asyncData ({store}) {
+    const myCollections = store.dispatch(types.ACTION_LOAD_COLLECTIONS_ASYNC)
+    const myFavorite = store.dispatch(types.ACTION_LOAD_FAVORITE_ASYNC)
+    const myWishlist = store.dispatch(types.ACTION_LOAD_WISHLIST_ASYNC)
+    await Promise.all([myCollections, myFavorite, myWishlist])
+  },
   computed: {
     ...mapGetters({
       getCollections: types.COLLECTIONS,
@@ -61,12 +67,17 @@ export default {
       getUser: types.USER
     })
   },
-  async created () {
-    const myCollections = this.$store.dispatch(types.ACTION_LOAD_COLLECTIONS_ASYNC)
-    const myFavorite = this.$store.dispatch(types.ACTION_LOAD_FAVORITE_ASYNC)
-    const myWishlist = this.$store.dispatch(types.ACTION_LOAD_WISHLIST_ASYNC)
-    await Promise.all([myCollections, myFavorite, myWishlist])
+  beforeDestroy () {
+    this.$store.commit(types.SET_COLLECTIONS, null)
+    this.$store.commit(types.SET_FAVORITE, null)
+    this.$store.commit(types.SET_WISHLIST, null)
   }
+  // async created () {
+  //   const myCollections = store.dispatch(types.ACTION_LOAD_COLLECTIONS_ASYNC)
+  //   const myFavorite = store.dispatch(types.ACTION_LOAD_FAVORITE_ASYNC)
+  //   const myWishlist = store.dispatch(types.ACTION_LOAD_WISHLIST_ASYNC)
+  //   await Promise.all([myCollections, myFavorite, myWishlist])
+  // }
 }
 </script>
 
