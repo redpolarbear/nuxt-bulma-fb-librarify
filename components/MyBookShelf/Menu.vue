@@ -13,11 +13,11 @@
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link to="my-collections" active-class="is-active">My Collections</nuxt-link>
+        <nuxt-link to="/my-bookshelf/my-collections" active-class="is-active">My Collections</nuxt-link>
         <ul>
           <template v-for="(item, index) in myCollections">
             <li :key="index">
-                <nuxt-link :to="`/my-bookshelf/${item.collection.slug}`" active-class="is-active">{{ item.collection.name }}</nuxt-link>
+              <nuxt-link :to="`/my-bookshelf/${item.collection.slug}`" active-class="is-active">{{ item.collection.name }}</nuxt-link>
             </li>
           </template>
         </ul>
