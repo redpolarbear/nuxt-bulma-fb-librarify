@@ -5,9 +5,7 @@
         <!-- START: aside menu column -->
         <div class="column is-3">
           <app-my-bookshelf-menu
-            :myCollections="getCollections"
-            :myFavorite="getFavorite"
-            :myWishlist="getWishlist">
+            :myBookshelf="myBookshelf">
           </app-my-bookshelf-menu>
         </div>
         <!-- END: aside menu column -->
@@ -35,19 +33,18 @@ export default {
     const myFavorite = store.dispatch(types.ACTION_LOAD_FAVORITE_ASYNC)
     const myWishlist = store.dispatch(types.ACTION_LOAD_WISHLIST_ASYNC)
     await Promise.all([myCollections, myFavorite, myWishlist])
+    store.commit(types.SET_BOOKSHELF)
   },
   computed: {
     ...mapGetters({
-      getCollections: types.COLLECTIONS,
-      getFavorite: types.FAVORITE,
-      getWishlist: types.WISHLIST,
-      getUser: types.USER
+      myBookshelf: types.BOOKSHELF
     })
   },
   beforeDestroy () {
     this.$store.commit(types.SET_COLLECTIONS, null)
     this.$store.commit(types.SET_FAVORITE, null)
     this.$store.commit(types.SET_WISHLIST, null)
+    this.$store.commit(types.SET_BOOKSHELF)
   }
 }
 </script>
