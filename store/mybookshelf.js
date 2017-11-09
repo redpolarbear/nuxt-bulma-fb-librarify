@@ -1,14 +1,19 @@
 import firebase from '@/firebaseInit'
 import * as types from '@/types'
 import _ from 'lodash'
+import slug from 'slug'
 
 export const state = () => ({
+  bookshelf: {},
   collections: [],
   favorite: {},
   wishlist: {}
 })
 
 export const getters = {
+  GET_BOOKSHELF: (state) => {
+    return state.bookshelf
+  },
   GET_COLLECTIONS: (state) => {
     return state.collections
   },
@@ -21,6 +26,13 @@ export const getters = {
 }
 
 export const mutations = {
+  SET_BOOKSHELF (state) {
+    state.bookshelf = {
+      favorite: state.favorite,
+      wishlist: state.wishlist,
+      collections: state.collections
+    }
+  },
   SET_COLLECTIONS (state, payload) {
     state.collections = payload
   },
@@ -35,7 +47,8 @@ export const mutations = {
   },
   ADD_ONE_EMPTY_COLLECTION (state) {
     state.collections.push({
-      collection: { name: '', slug: '' },
+      name: '',
+      slug: '',
       meta: {
         booksNo: 0,
         isChecked: false,
@@ -94,7 +107,7 @@ export const actions = {
           isLoading: false,
           booksNo: e[1].books === null ? 0 : _.size(e[1].books)
         }
-      }, {collection: e[1]}))
+      }, e[1]))
       commit('SET_COLLECTIONS', usersCollectionArray)
     } catch (error) {
       console.log(error)
@@ -103,7 +116,7 @@ export const actions = {
   async LOAD_FAVORITE_ASYNC ({commit, rootGetters}) {
     try {
       const usersFavorite = await firebase.database().ref('userFavoriteBooks/' + rootGetters[types.USER].id).once('value')
-      commit('SET_FAVORITE', usersFavorite.val())
+      commit('SET_FAVORITE', Object.assign({ meta: {booksNo: usersFavorite.val().books === null ? 0 : _.size(usersFavorite.val().books)} }, usersFavorite.val()))
     } catch (error) {
       console.log(error)
     }
@@ -111,36 +124,34 @@ export const actions = {
   async LOAD_WISHLIST_ASYNC ({commit, rootGetters}) {
     try {
       const usersWishlist = await firebase.database().ref('userWishlistBooks/' + rootGetters[types.USER].id).once('value')
-      commit('SET_WISHLIST', usersWishlist.val())
+      commit('SET_WISHLIST', Object.assign({ meta: {booksNo: usersWishlist.val().books === null ? 0 : _.size(usersWishlist.val().books)} }, usersWishlist.val()))
     } catch (error) {
       console.log(error)
     }
   },
   async SAVE_ONE_COLLECTION_INTO_FB ({state, commit, rootGetters}, payload) { // TODO: try {} catch (error) {}
-    try {
-    } catch (error) {
-      console.log(error)
-    }
     commit('ENABLE_COLLECTION_LOADING', { index: payload.index })
     let collectionKey = ''
     let collection = {}
-    if (payload.collection.uid) { // modify the name of the collection
-      collectionKey = payload.collection.uid
+    if (payload.uid) { // modify the name of the collection
+      collectionKey = payload.uid
       collection[collectionKey] = {
-        ...payload.collection,
+        ..._.omit(payload, [ 'index', 'meta' ]),
+        slug: slug(payload.name),
         updatedAt: firebase.database.ServerValue.TIMESTAMP
       }
     } else { // add the new collection
       collectionKey = firebase.database().ref('userCollectionsBooks/' + rootGetters[types.USER].id).push().key
       collection[collectionKey] = {
-        name: payload.collection.name,
+        name: payload.name,
+        slug: slug(payload.name),
         uid: collectionKey,
         createdAt: firebase.database.ServerValue.TIMESTAMP,
         updatedAt: firebase.database.ServerValue.TIMESTAMP
       }
     }
     await firebase.database().ref('userCollectionsBooks').child(rootGetters[types.USER].id).update(collection)
-    commit('UPDATE_ONE_COLLECTION', Object.assign({ index: payload.index }, {collection: collection[collectionKey]}, {meta: payload.meta}))
+    commit('UPDATE_ONE_COLLECTION', Object.assign({ index: payload.index }, collection[collectionKey], { meta: payload.meta }))
     commit('DISABLE_COLLECTION_EDITING', { index: payload.index })
     commit('TOGGLE_COLLECTION_ISEXISTED', { index: payload.index, switch: false })
     commit('DISABLE_COLLECTION_LOADING', { index: payload.index })
