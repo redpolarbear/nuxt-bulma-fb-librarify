@@ -24,8 +24,7 @@
               v-for="item in menuItems" 
               :key="item.title" 
               :to="item.link" 
-              active-class='is-active' 
-              exact> 
+              active-class='is-active'>
                 <i class="fa" v-bind:class="item.icon"></i>&nbsp; {{ item.title }}
             </nuxt-link> <!-- default menu items -->
             
