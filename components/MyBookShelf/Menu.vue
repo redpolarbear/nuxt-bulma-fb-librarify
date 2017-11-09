@@ -44,7 +44,7 @@
 
 <script>
 export default {
-  name: 'mybookshelfmenu',
+  name: 'myBookshelfMenu',
   props: [
     'myCollections',
     'myFavorite',
