@@ -65,7 +65,7 @@
         </div>
       </section>
       <footer class="modal-card-foot is-inline-block has-text-right">
-        <button class="button is-right" @click="onCancel">Cancel</button>
+        <button class="button" @click="onCancel">Cancel</button>
         <button class="button is-success" v-bind:class="{ 'is-loading': getLoading }" v-bind:disabled="$v.form.$invalid" @click="onLogin" >Login</button>
       </footer>
     </div>
