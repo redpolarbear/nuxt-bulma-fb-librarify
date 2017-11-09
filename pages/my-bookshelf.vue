@@ -12,30 +12,7 @@
         </div>
         <!-- END: aside menu column -->
         <div class="column is-9">
-          <div class="box">
-            <nav class="level">
-              <!-- Left side -->
-              <div class="level-left">
-                <div class="level-item">
-                  <div class="field has-addons">
-                    <p class="control">
-                      <input class="input" type="text" placeholder="Find a collection">
-                    </p>
-                    <p class="control">
-                      <button class="button">
-                        Search
-                      </button>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <!-- Right side -->
-              <div class="level-right">
-                <p class="level-item"><a class="button is-success">New</a></p>
-              </div>
-            </nav>
-          </div>
-          <nuxt-child />
+          <nuxt-child :key="$route.params.collectionName"/>
         </div>
       </div>
     </div>
@@ -46,7 +23,7 @@
 import { mapGetters } from 'vuex'
 // import localStorage from 'localStorage'
 import * as types from '@/types'
-import MyBookShelfMenuComponent from '@/components/MyBookShelf/Menu'
+import MyBookShelfMenuComponent from '@/components/MyBookshelf/Menu'
 
 export default {
   name: 'mybookshelf',
@@ -72,12 +49,6 @@ export default {
     this.$store.commit(types.SET_FAVORITE, null)
     this.$store.commit(types.SET_WISHLIST, null)
   }
-  // async created () {
-  //   const myCollections = store.dispatch(types.ACTION_LOAD_COLLECTIONS_ASYNC)
-  //   const myFavorite = store.dispatch(types.ACTION_LOAD_FAVORITE_ASYNC)
-  //   const myWishlist = store.dispatch(types.ACTION_LOAD_WISHLIST_ASYNC)
-  //   await Promise.all([myCollections, myFavorite, myWishlist])
-  // }
 }
 </script>
 
