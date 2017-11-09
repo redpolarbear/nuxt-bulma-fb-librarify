@@ -1,12 +1,15 @@
 <template>
-  <div>
-    this is the {{ $route.params.collectionName }}
-  </div>
+  <app-collection-content></app-collection-content>
 </template>
 
 <script>
-export default {
+import CollectionContentComponent from '@/components/MyBookshelf/CollectionContent'
 
+export default {
+  name: 'collectionNamePage',
+  components: {
+    'app-collection-content': CollectionContentComponent
+  }
 }
 </script>
 
