@@ -45,10 +45,7 @@
 <script>
 export default {
   name: 'myBookshelfMenu',
-  props: [ 'myBookshelf' ],
-  created () {
-    console.log(this.myBookshelf)
-  }
+  props: [ 'myBookshelf' ]
 }
 </script>
 
