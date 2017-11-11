@@ -13,7 +13,22 @@ export const getters = {
 
 export const mutations = {
   SET_BOOK_INFO (state, payload) {
-    state.bookInfo = payload
+    state.bookInfo = {
+      id: payload.id,
+      title: payload.title,
+      subtitle: payload.subtitle,
+      authors: payload.authors,
+      publisher: payload.publisher,
+      publishedDate: payload.publishedDate,
+      description: payload.description,
+      isbn10: payload.industryIdentifiers.find(e => e.type === 'ISBN_10')['identifier'] || null,
+      isbn13: payload.industryIdentifiers.find(e => e.type === 'ISBN_13')['identifier'] || null,
+      pageCount: payload.pageCount,
+      dimensions: payload.dimensions,
+      categories: payload.categories,
+      imageLinks: payload.imageLinks,
+      language: payload.language
+    }
   },
   SET_BOOK_INFO_UID (state, payload) {
     state.bookInfo.uid = payload.uid
@@ -22,8 +37,6 @@ export const mutations = {
 
 export const actions = {
   async SEARCH_BOOK_BY_ISBN_IN_FB_ASYNC ({commit}, payload) { // payload = { isbn: isbn } - validated
-    // commit(types.SET_LOADING, true, { root: true })
-    // commit(types.CLEAR_ALL_MESSAGE, null, { root: true })
     let child = ''
     if (payload.isbn.length === 10) {
       child = 'isbn10'
@@ -40,7 +53,6 @@ export const actions = {
       } else {
         commit('SET_BOOK_INFO', null)
       }
-      // commit(types.SET_LOADING, false, { root: true })
     } catch (error) {
       // Handle Errors here.
       // let errorCode = error.code
@@ -52,46 +64,25 @@ export const actions = {
     }
   },
   async SEARCH_BOOK_BY_ISBN_ASYNC ({commit}, payload) { // payload = { isbn: isbn } - validated
-    // commit(types.SET_LOADING, true, { root: true })
-    // commit(types.CLEAR_ALL_MESSAGE, null, { root: true })
-    const url = 'http://feedback.api.juhe.cn/ISBN'
+    const url = '/volumes'
     const params = {
-      sub: payload.isbn,
-      key: '436d9b993fd3c3138954fd6fc9f89053'
+      q: 'isbn:' + payload.isbn
     }
     try {
-      const res = await axios.get(url, {
+      const res = await this.$axios.get(url, {
         params,
         headers: {'X-Requested-With': 'XMLHttpRequest'}
       })
       console.log(res)
-      if (res.data.error_code === 0) {
-        commit('SET_BOOK_INFO', res.data.result)
-      } else {
-        let errorMessage = ''
-        switch (res.data.error_code) {
-          case 305403:
-            errorMessage = 'Missing required ISBN'
-            break
-          case 204401:
-            errorMessage = 'Network Error. Please Re-try!'
-            break
-          case 204402:
-            errorMessage = 'Unable to find the data'
-            break
-          case 10020:
-            errorMessage = 'Interface Maintenance'
-            break
-          case 10021:
-            errorMessage = 'Interface Failed'
-            break
-          default:
-            errorMessage = 'Unknown Error Occurred. Please contact the administrator.'
-            break
+      if (res.status === 200) {
+        if (res.data.totalItems !== 0) {
+          const resVol = await this.$axios.get(url + '/' + res.data.items[0].id, {
+            headers: {'X-Requested-With': 'XMLHttpRequest'}
+          })
+          console.log(resVol)
+          commit('SET_BOOK_INFO', Object.assign({id: resVol.data.id}, resVol.data.volumeInfo))
         }
-        commit(types.SET_ERROR, errorMessage, { root: true })
       }
-      commit(types.SET_LOADING, false, { root: true })
     } catch (error) {
       // Handle Errors here.
       // let errorCode = error.code

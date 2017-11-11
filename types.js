@@ -13,7 +13,7 @@ export const USER_PROFILE = 'authentication/profile/GET_USER_PROFILE'
 
 export const IS_FOLLOWING = 'authentication/profile/relationship/GET_IS_FOLLOWING'
 
-export const BOOK_INFO = 'library/book/GET_BOOK_INFO'
+export const BOOK_INFO = 'library/book/GET_BOOK_INFO' // OK
 
 export const BOOKSHELF = 'mybookshelf/GET_BOOKSHELF' // OK
 export const COLLECTIONS = 'mybookshelf/GET_COLLECTIONS' // OK
@@ -71,7 +71,7 @@ export const ACTION_FOLLOW_THE_USER_ASYNC = 'authentication/profile/relationship
 export const ACTION_UNFOLLOW_THE_USER_ASYNC = 'authentication/profile/relationship/UNFOLLOW_THE_USER_ASYNC'
 export const ACTION_RELATIONSHIP_CHECK = 'authentication/profile/relationship/RELATIONSHIP_CHECK'
 
-export const ACTION_SEARCH_BOOK_BY_ISBN_ASYNC = 'library/book/SEARCH_BOOK_BY_ISBN_ASYNC'
+export const ACTION_SEARCH_BOOK_BY_ISBN_ASYNC = 'library/book/SEARCH_BOOK_BY_ISBN_ASYNC' // OK
 export const ACTION_SEARCH_BOOK_BY_ISBN_IN_FB_ASYNC = 'library/book/SEARCH_BOOK_BY_ISBN_IN_FB_ASYNC'
 export const ACTION_SAVE_BOOK_INFO_INTO_FB_ASYNC = 'library/book/SAVE_BOOK_INFO_INTO_FB_ASYNC'
 
