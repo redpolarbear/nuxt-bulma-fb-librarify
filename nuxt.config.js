@@ -53,7 +53,9 @@ module.exports = {
   */
   modules: [
     '@nuxtjs/bulma',
-    '@nuxtjs/font-awesome'
+    '@nuxtjs/font-awesome',
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
   /*
   ** Plugins
@@ -64,5 +66,15 @@ module.exports = {
   ],
   router: {
     middleware: 'router-auth'
-  }
+  },
+  proxy: [
+    [ '/api',
+      {
+        target: 'https://www.googleapis.com',
+        pathRewrite: {
+          '^/api': '/books/v1'
+        }
+      }
+    ]
+  ]
 }
