@@ -18,8 +18,10 @@
     "npm": "5.5.1"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^4.4.0",
     "@nuxtjs/bulma": "^1.0.3",
     "@nuxtjs/font-awesome": "^1.0.2",
+    "@nuxtjs/proxy": "^1.1.2",
     "firebase": "^4.6.1",
     "localStorage": "^1.0.3",
     "lodash": "^4.17.4",
@@ -27,6 +29,7 @@
     "nuxt": "^1.0.0-rc11",
     "shortid": "^2.2.8",
     "slug": "^0.9.1",
+    "validator": "^9.1.1",
     "vuelidate": "^0.6.1"
   },
   "devDependencies": {
