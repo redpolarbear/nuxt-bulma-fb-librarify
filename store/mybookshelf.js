@@ -33,6 +33,11 @@ export const mutations = {
       collections: state.collections
     }
   },
+  ADD_ONE_BOOK_INTO_COLLECTION_IN_THE_BOOKSHELF (state, payload) {
+    const targetCollectionIndex = _.findIndex(state.bookshelf.collections, function (e) { return e.uid === payload.collectionUid })
+    state.bookshelf.collections[targetCollectionIndex]['books'].push(payload.newBook)
+    state.bookshelf.collections[targetCollectionIndex]['meta'].booksNo++
+  },
   SET_COLLECTIONS (state, payload) {
     state.collections = payload
   },
@@ -99,15 +104,19 @@ export const actions = {
   async LOAD_COLLECTIONS_ASYNC ({commit, rootGetters}) {
     try {
       const usersCollections = await firebase.database().ref('userCollectionsBooks/' + rootGetters[types.USER].id).once('value')
-      let usersCollectionArray = Object.entries(usersCollections.val()).map(e => Object.assign({
-        meta: {
-          isEditing: false,
-          isExisted: false,
-          isChecked: false,
-          isLoading: false,
-          booksNo: e[1].books === null ? 0 : _.size(e[1].books)
-        }
-      }, e[1]))
+      let usersCollectionArray = Object.entries(usersCollections.val()).map(e => Object.assign(
+        e[1],
+        {
+          meta: {
+            isEditing: false,
+            isExisted: false,
+            isChecked: false,
+            isLoading: false,
+            booksNo: e[1].books === null ? 0 : _.size(e[1].books)
+          }
+        }, {
+          books: e[1].books !== null ? _.orderBy(e[1].books, ['updatedAt'], ['desc']) : null
+        }))
       commit('SET_COLLECTIONS', usersCollectionArray)
     } catch (error) {
       console.log(error)
