@@ -27,7 +27,8 @@ module.exports = {
       'vuelidate',
       'firebase',
       'iso-639-1',
-      'lodash'
+      'lodash',
+      'validator'
     ],
     /*
     ** Run ESLint on save
