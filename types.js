@@ -41,7 +41,7 @@ export const SET_USER_PROFILE = 'authentication/profile/SET_USER_PROFILE'
 
 export const SET_IS_FOLLOWING = 'authentication/profile/relationship/SET_IS_FOLLOWING'
 
-export const SET_BOOK_INFO = 'library/book/SET_BOOK_INFO'
+export const SET_BOOK_INFO = 'library/book/SET_BOOK_INFO' // OK
 
 export const SET_BOOKSHELF = 'mybookshelf/SET_BOOKSHELF' // OK
 export const SET_COLLECTIONS = 'mybookshelf/SET_COLLECTIONS' // OK
@@ -57,6 +57,7 @@ export const DISABLE_COLLECTION_EDITING = 'mybookshelf/DISABLE_COLLECTION_EDITIN
 export const TOGGLE_COLLECTION_CHECK = 'mybookshelf/TOGGLE_COLLECTION_CHECK'
 export const TOGGLE_COLLECTION_ISEXISTED = 'mybookshelf/TOGGLE_COLLECTION_ISEXISTED'
 export const CLEAR_COLLECTIONS = 'mybookshelf/CLEAR_COLLECTIONS'
+export const ADD_ONE_BOOK_INTO_COLLECTION_IN_THE_BOOKSHELF = 'mybookshelf/ADD_ONE_BOOK_INTO_COLLECTION_IN_THE_BOOKSHELF'
 
 // Actions
 export const ACTION_USER_LOGIN_ASYNC = 'authentication/USER_LOGIN'
@@ -74,11 +75,11 @@ export const ACTION_RELATIONSHIP_CHECK = 'authentication/profile/relationship/RE
 export const ACTION_SEARCH_BOOK_BY_ISBN_ASYNC = 'library/book/SEARCH_BOOK_BY_ISBN_ASYNC' // OK
 export const ACTION_SEARCH_BOOK_BY_ISBN_IN_FB_ASYNC = 'library/book/SEARCH_BOOK_BY_ISBN_IN_FB_ASYNC'
 export const ACTION_SAVE_BOOK_INFO_INTO_FB_ASYNC = 'library/book/SAVE_BOOK_INFO_INTO_FB_ASYNC'
+export const ACTION_SAVE_THE_BOOK_INTO_COLLECTION_IN_FB = 'library/book/SAVE_THE_BOOK_INTO_COLLECTION_IN_FB' // OK
 
 export const ACTION_LOAD_COLLECTIONS_ASYNC = 'mybookshelf/LOAD_COLLECTIONS_ASYNC' // OK
 export const ACTION_SAVE_ONE_COLLECTION_INTO_FB = 'mybookshelf/SAVE_ONE_COLLECTION_INTO_FB'
 export const ACTION_REMOVE_ONE_COLLECTION_FROM_FB = 'mybookshelf/REMOVE_ONE_COLLECTION_FROM_FB'
-export const ACTION_SAVE_THE_BOOK_INTO_COLLECTION_IN_FB = 'mybookshelf/SAVE_THE_BOOK_INTO_COLLECTION_IN_FB'
 
 export const ACTION_LOAD_FAVORITE_ASYNC = 'mybookshelf/LOAD_FAVORITE_ASYNC' // OK
 export const ACTION_LOAD_WISHLIST_ASYNC = 'mybookshelf/LOAD_WISHLIST_ASYNC' // OK
