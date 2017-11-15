@@ -1,5 +1,5 @@
 import * as types from '@/types'
-import { DB } from '@/firebaseInit'
+import firebase from '@/firebaseInit'
 
 export const state = () => ({
   bookInfo: null
@@ -13,21 +13,25 @@ export const getters = {
 
 export const mutations = {
   SET_BOOK_INFO (state, payload) {
-    state.bookInfo = {
-      id: payload.id,
-      title: payload.title,
-      subtitle: payload.subtitle,
-      authors: payload.authors,
-      publisher: payload.publisher,
-      publishedDate: payload.publishedDate,
-      description: payload.description,
-      isbn10: payload.industryIdentifiers.find(e => e.type === 'ISBN_10')['identifier'] || null,
-      isbn13: payload.industryIdentifiers.find(e => e.type === 'ISBN_13')['identifier'] || null,
-      pageCount: payload.pageCount,
-      dimensions: payload.dimensions,
-      categories: payload.categories,
-      imageLinks: payload.imageLinks,
-      language: payload.language
+    if (payload) {
+      state.bookInfo = {
+        id: payload.id,
+        title: payload.title,
+        subtitle: payload.subtitle || null,
+        authors: payload.authors || null,
+        publisher: payload.publisher || null,
+        publishedDate: payload.publishedDate || null,
+        description: payload.description || null,
+        isbn10: payload.industryIdentifiers.find(e => e.type === 'ISBN_10')['identifier'] || null,
+        isbn13: payload.industryIdentifiers.find(e => e.type === 'ISBN_13')['identifier'] || null,
+        pageCount: payload.pageCount || null,
+        dimensions: payload.dimensions || null,
+        categories: payload.categories || null,
+        imageLinks: payload.imageLinks || null,
+        language: payload.language || null
+      }
+    } else {
+      state.bookInfo = payload
     }
   },
   SET_BOOK_INFO_UID (state, payload) {
@@ -44,7 +48,7 @@ export const actions = {
       child = 'isbn13'
     }
     try {
-      const bookSnapshot = await DB.ref('books').orderByChild(child).equalTo(payload.isbn).once('value')
+      const bookSnapshot = await firebase.database().ref('books').orderByChild(child).equalTo(payload.isbn).once('value')
       if (bookSnapshot.val()) {
         bookSnapshot.forEach(childSnapshot => {
           commit('SET_BOOK_INFO', Object.assign({}, childSnapshot.val()))
@@ -73,13 +77,11 @@ export const actions = {
         params,
         headers: {'X-Requested-With': 'XMLHttpRequest'}
       })
-      console.log(res)
       if (res.status === 200) {
         if (res.data.totalItems !== 0) {
           const resVol = await this.$axios.get(url + '/' + res.data.items[0].id, {
             headers: {'X-Requested-With': 'XMLHttpRequest'}
           })
-          console.log(resVol)
           commit('SET_BOOK_INFO', Object.assign({id: resVol.data.id}, resVol.data.volumeInfo))
         }
       }
@@ -94,14 +96,12 @@ export const actions = {
     }
   },
   async SAVE_BOOK_INFO_INTO_FB_ASYNC ({getters, commit}) {
-    commit(types.SET_LOADING, true, { root: true })
-    commit(types.CLEAR_ALL_MESSAGE, null, { root: true })
-    let newBookKey = DB.ref('books').push().key
+    let newBookKey = firebase.database().ref('books').push().key
     commit('SET_BOOK_INFO_UID', { uid: newBookKey })
     let newBookInfo = {}
     newBookInfo[newBookKey] = getters['GET_BOOK_INFO']
     try {
-      await DB.ref('books').update(newBookInfo)
+      await firebase.database().ref('books').update(newBookInfo)
       commit(types.SET_LOADING, false, { root: true })
     } catch (error) {
       // Handle Errors here.
@@ -112,5 +112,32 @@ export const actions = {
       commit(types.SET_ERROR, errorMessage, { root: true })
       console.log(error)
     }
+  },
+  async SAVE_THE_BOOK_INTO_COLLECTION_IN_FB ({state, commit, rootGetters}, payload) {
+    const collectionUid = payload.collectionUid
+    // check if the book is existed
+    const collectionBooks = await firebase.database().ref('userCollectionsBooks/' + rootGetters[types.USER].id + '/' + collectionUid).child('books').once('value')
+    if (collectionBooks.val()) { // already collected some books
+      const collectionBooksArray = Object.entries(collectionBooks.val()).map(e => Object.assign({}, e[1]))
+      const newBook = rootGetters[types.BOOK_INFO]
+      const isExisted = collectionBooksArray.find(e => newBook.isbn10 === e.isbn10 || newBook.isbn13 === e.isbn13)
+      if (isExisted !== undefined) {
+        const infoMessage = 'You have already got this book.'
+        commit(types.SET_INFO, infoMessage, { root: true })
+        return
+      }
+    }
+    // the collection is empty or never collect this book into this collection
+    let update = {}
+    const updateKey = firebase.database().ref('userCollectionsBooks/' + rootGetters[types.USER].id + '/' + collectionUid).child('books').push().key
+    const newBook = {
+      ...rootGetters[types.BOOK_INFO],
+      uid: updateKey,
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
+      updatedAt: firebase.database.ServerValue.TIMESTAMP
+    }
+    update['userCollectionsBooks/' + rootGetters[types.USER].id + '/' + collectionUid + '/books/' + updateKey] = newBook
+    await firebase.database().ref().update(update)
+    commit(types.ADD_ONE_BOOK_INTO_COLLECTION_IN_THE_BOOKSHELF, { collectionUid, newBook }, { root: true })
   }
 }
