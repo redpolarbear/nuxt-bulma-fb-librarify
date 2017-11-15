@@ -24,7 +24,7 @@
             <app-new-book-modal
               :showNewBookModal="showNewBookModal" 
               @dismissNewBookModal="showNewBookModal=$event"
-              :collectionName="content.name"></app-new-book-modal>
+              :collection="content"></app-new-book-modal>
           </p>
           <p class="level-item" v-else-if="content.type === 1">
             <button class="button is-info"  @click="toggleNewCollectionModal"><span class="icon"><i class="fa fa-plus-circle"></i></span><span>Add</span></button>
@@ -81,7 +81,7 @@ export default {
         this.content = Object.assign(this.content, { collections: this.myBookshelf.collections }) // array
         break
       default:
-        this.content = Object.assign(this.content, this.loadContent(this.$route.params.collectionName)) // object
+        this.content = Object.assign(this.content, this.loadContent(this.$route.params.collectionName)) // object - other customized collections
         break
     }
   },
