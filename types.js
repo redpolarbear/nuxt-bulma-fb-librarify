@@ -14,6 +14,7 @@ export const USER_PROFILE = 'authentication/profile/GET_USER_PROFILE'
 export const IS_FOLLOWING = 'authentication/profile/relationship/GET_IS_FOLLOWING'
 
 export const BOOK_INFO = 'library/book/GET_BOOK_INFO' // OK
+export const ISBN_CODE = 'library/book/GET_ISBN_CODE' // OK
 
 export const BOOKSHELF = 'mybookshelf/GET_BOOKSHELF' // OK
 export const COLLECTIONS = 'mybookshelf/GET_COLLECTIONS' // OK
@@ -42,6 +43,7 @@ export const SET_USER_PROFILE = 'authentication/profile/SET_USER_PROFILE'
 export const SET_IS_FOLLOWING = 'authentication/profile/relationship/SET_IS_FOLLOWING'
 
 export const SET_BOOK_INFO = 'library/book/SET_BOOK_INFO' // OK
+export const SET_ISBN_CODE = 'library/book/SET_ISBN_CODE' // OK
 
 export const SET_BOOKSHELF = 'mybookshelf/SET_BOOKSHELF' // OK
 export const SET_COLLECTIONS = 'mybookshelf/SET_COLLECTIONS' // OK
