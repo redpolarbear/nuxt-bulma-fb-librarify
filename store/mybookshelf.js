@@ -33,7 +33,7 @@ export const mutations = {
       collections: state.collections
     }
   },
-  ADD_ONE_BOOK_INTO_COLLECTION_IN_THE_BOOKSHELF (state, payload) {
+  ADD_ONE_BOOK_INTO_COLLECTION (state, payload) {
     const targetCollectionIndex = _.findIndex(state.bookshelf.collections, function (e) { return e.uid === payload.collectionUid })
     state.bookshelf.collections[targetCollectionIndex]['books'].push(payload.newBook)
     state.bookshelf.collections[targetCollectionIndex]['meta'].booksNo++
@@ -101,7 +101,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async LOAD_COLLECTIONS_ASYNC ({commit, rootGetters}) {
+  async LOAD_MY_COLLECTIONS_ASYNC ({commit, rootGetters}) {
     try {
       const usersCollections = await firebase.database().ref('userCollectionsBooks/' + rootGetters[types.USER].id).once('value')
       let usersCollectionArray = Object.entries(usersCollections.val()).map(e => Object.assign(
@@ -122,18 +122,26 @@ export const actions = {
       console.log(error)
     }
   },
-  async LOAD_FAVORITE_ASYNC ({commit, rootGetters}) {
+  async LOAD_MY_FAVORITE_ASYNC ({commit, rootGetters}) {
     try {
       const usersFavorite = await firebase.database().ref('userFavoriteBooks/' + rootGetters[types.USER].id).once('value')
-      commit('SET_FAVORITE', Object.assign({ meta: {booksNo: usersFavorite.val().books === null ? 0 : _.size(usersFavorite.val().books)} }, usersFavorite.val()))
+      commit('SET_FAVORITE', Object.assign(
+        usersFavorite.val(),
+        { meta: {booksNo: usersFavorite.val().books === null ? 0 : _.size(usersFavorite.val().books)} },
+        { books: usersFavorite.val().books === null ? null : _.orderBy(usersFavorite.val().books, ['updatedAt'], ['desc']) }
+      ))
     } catch (error) {
       console.log(error)
     }
   },
-  async LOAD_WISHLIST_ASYNC ({commit, rootGetters}) {
+  async LOAD_MY_WISHLIST_ASYNC ({commit, rootGetters}) {
     try {
       const usersWishlist = await firebase.database().ref('userWishlistBooks/' + rootGetters[types.USER].id).once('value')
-      commit('SET_WISHLIST', Object.assign({ meta: {booksNo: usersWishlist.val().books === null ? 0 : _.size(usersWishlist.val().books)} }, usersWishlist.val()))
+      commit('SET_WISHLIST', Object.assign(
+        usersWishlist.val(),
+        { meta: {booksNo: usersWishlist.val().books === null ? 0 : _.size(usersWishlist.val().books)} },
+        { books: usersWishlist.val().books === null ? null : _.orderBy(usersWishlist.val().books, ['updatedAt'], ['desc']) }
+      ))
     } catch (error) {
       console.log(error)
     }

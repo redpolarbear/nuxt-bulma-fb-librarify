@@ -4,9 +4,9 @@
       <div class="columns">
         <!-- START: aside menu column -->
         <div class="column is-3">
-          <app-my-bookshelf-menu
+          <app-bookshelf-menu
             :myBookshelf="myBookshelf">
-          </app-my-bookshelf-menu>
+          </app-bookshelf-menu>
         </div>
         <!-- END: aside menu column -->
         <div class="column is-9">
@@ -21,17 +21,17 @@
 import { mapGetters } from 'vuex'
 // import localStorage from 'localStorage'
 import * as types from '@/types'
-import MyBookShelfMenuComponent from '@/components/MyBookshelf/Menu'
+import BookShelfMenuComponent from '@/components/Bookshelf/BookshelfMenu'
 
 export default {
   name: 'mybookshelf',
   components: {
-    'app-my-bookshelf-menu': MyBookShelfMenuComponent
+    'app-bookshelf-menu': BookShelfMenuComponent
   },
   async asyncData ({store}) {
-    const myCollections = store.dispatch(types.ACTION_LOAD_COLLECTIONS_ASYNC)
-    const myFavorite = store.dispatch(types.ACTION_LOAD_FAVORITE_ASYNC)
-    const myWishlist = store.dispatch(types.ACTION_LOAD_WISHLIST_ASYNC)
+    const myCollections = store.dispatch(types.ACTION_LOAD_MY_COLLECTIONS_ASYNC)
+    const myFavorite = store.dispatch(types.ACTION_LOAD_MY_FAVORITE_ASYNC)
+    const myWishlist = store.dispatch(types.ACTION_LOAD_MY_WISHLIST_ASYNC)
     await Promise.all([myCollections, myFavorite, myWishlist])
     store.commit(types.SET_BOOKSHELF)
   },

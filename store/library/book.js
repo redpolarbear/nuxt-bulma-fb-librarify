@@ -138,6 +138,6 @@ export const actions = {
     }
     update['userCollectionsBooks/' + rootGetters[types.USER].id + '/' + collectionUid + '/books/' + updateKey] = newBook
     await firebase.database().ref().update(update)
-    commit(types.ADD_ONE_BOOK_INTO_COLLECTION_IN_THE_BOOKSHELF, { collectionUid, newBook }, { root: true })
+    commit(types.ADD_ONE_BOOK_INTO_COLLECTION, { collectionUid, newBook }, { root: true })
   }
 }

@@ -21,17 +21,17 @@
         <div class="level-right">
           <p class="level-item" v-if="content.type === 0">
             <button class="button is-primary" @click="toggleNewBookModal"><span class="icon"><i class="fa fa-plus-circle"></i></span><span>Add</span></button>
-            <app-new-book-modal
+            <app-add-modal
               :showNewBookModal="showNewBookModal" 
               @dismissNewBookModal="showNewBookModal=$event"
-              :collection="content"></app-new-book-modal>
+              :collection="content"></app-add-modal>
           </p>
-          <p class="level-item" v-else-if="content.type === 1">
+          <!-- <p class="level-item" v-else-if="content.type === 1">
             <button class="button is-info"  @click="toggleNewCollectionModal"><span class="icon"><i class="fa fa-plus-circle"></i></span><span>Add</span></button>
             <app-new-collection-modal 
               :showNewCollectionModal="showNewCollectionModal"
               @dismissNewCollectionModal="showNewCollectionModal=$event"></app-new-collection-modal>
-          </p>
+          </p> -->
         </div>
       </nav>
     </div>
@@ -44,14 +44,14 @@
 import { mapGetters } from 'vuex'
 import * as types from '@/types'
 
-import NewBookModalComponent from './NewBook'
-import NewCollectionModalComponent from './NewCollection'
+import AddModalComponent from '@/components/Bookshelf/CollectionContent/Addmodal'
+// import NewCollectionModalComponent from './NewCollection'
 
 export default {
   name: 'collectionContent',
   components: {
-    'app-new-book-modal': NewBookModalComponent,
-    'app-new-collection-modal': NewCollectionModalComponent
+    'app-add-modal': AddModalComponent
+    // 'app-new-collection-modal': NewCollectionModalComponent
   },
   data () {
     return {

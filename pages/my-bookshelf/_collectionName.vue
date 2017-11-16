@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import CollectionContentComponent from '@/components/MyBookshelf/CollectionContent'
+import CollectionContentComponent from '@/components/Bookshelf/CollectionContent'
 
 export default {
   name: 'collectionNamePage',
