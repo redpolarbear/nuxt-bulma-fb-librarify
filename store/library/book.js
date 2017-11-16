@@ -1,4 +1,5 @@
 import * as types from '@/types'
+import _ from 'lodash'
 import firebase from '@/firebaseInit'
 
 export const state = () => ({
@@ -113,17 +114,15 @@ export const actions = {
       console.log(error)
     }
   },
-  async SAVE_THE_BOOK_INTO_COLLECTION_IN_FB ({state, commit, rootGetters}, payload) {
+  async SAVE_THE_BOOK_INTO_COLLECTION_IN_FB ({commit, rootGetters}, payload) {
     const collectionUid = payload.collectionUid
     // check if the book is existed
     const collectionBooks = await firebase.database().ref('userCollectionsBooks/' + rootGetters[types.USER].id + '/' + collectionUid).child('books').once('value')
     if (collectionBooks.val()) { // already collected some books
       const collectionBooksArray = Object.entries(collectionBooks.val()).map(e => Object.assign({}, e[1]))
       const newBook = rootGetters[types.BOOK_INFO]
-      const isExisted = collectionBooksArray.find(e => newBook.isbn10 === e.isbn10 || newBook.isbn13 === e.isbn13)
-      if (isExisted !== undefined) {
-        const infoMessage = 'You have already got this book.'
-        commit(types.SET_INFO, infoMessage, { root: true })
+      if (CHECK_BOOK_IS_EXISTED_BY_ISBN(collectionBooksArray, newBook) !== undefined) {
+        console.log('The book is existed already.')
         return
       }
     }
@@ -139,5 +138,59 @@ export const actions = {
     update['userCollectionsBooks/' + rootGetters[types.USER].id + '/' + collectionUid + '/books/' + updateKey] = newBook
     await firebase.database().ref().update(update)
     commit(types.ADD_ONE_BOOK_INTO_COLLECTION, { collectionUid, newBook }, { root: true })
+  },
+  async SAVE_THE_BOOK_INTO_FAVORITE_IN_FB ({commit, rootGetters}, payload) {
+    const favoriteBooks = await firebase.database().ref('userFavoriteBooks/' + rootGetters[types.USER].id).child('books').once('value')
+    if (favoriteBooks.val()) {
+      const favoriteBooksArray = Object.entries(favoriteBooks.val()).map(e => Object.assign({}, e[1]))
+      const newBook = rootGetters[types.BOOK_INFO]
+      if (CHECK_BOOK_IS_EXISTED_BY_ISBN(favoriteBooksArray, newBook) !== undefined) {
+        // existed already
+        console.log('The book is existed.')
+        return
+      }
+    }
+    // the collection is empty or never collect this book into this collection
+    let update = {}
+    const updateKey = firebase.database().ref('userFavoriteBooks/' + rootGetters[types.USER].id).child('books').push().key
+    const newBook = {
+      ...rootGetters[types.BOOK_INFO],
+      uid: updateKey,
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
+      updatedAt: firebase.database.ServerValue.TIMESTAMP
+    }
+    update['userFavoriteBooks/' + rootGetters[types.USER].id + '/books/' + updateKey] = newBook
+    await firebase.database().ref().update(update)
+    commit(types.ADD_ONE_BOOK_INTO_FAVORITE, { newBook }, { root: true })
+  },
+  async SAVE_THE_BOOK_INTO_WISHLIST_IN_FB ({state, commit, rootGetters}, payload) {
+    const favoriteBooks = await firebase.database().ref('userWishlistBooks/' + rootGetters[types.USER].id).child('books').once('value')
+    if (favoriteBooks.val()) {
+      const favoriteBooksArray = Object.entries(favoriteBooks.val()).map(e => Object.assign({}, e[1]))
+      const newBook = rootGetters[types.BOOK_INFO]
+      if (CHECK_BOOK_IS_EXISTED_BY_ISBN(favoriteBooksArray, newBook) !== undefined) {
+        // existed already
+        console.log('The book is existed.')
+        return
+      }
+    }
+    // the collection is empty or never collect this book into this collection
+    let update = {}
+    const updateKey = firebase.database().ref('userWishlistBooks/' + rootGetters[types.USER].id).child('books').push().key
+    const newBook = {
+      ...rootGetters[types.BOOK_INFO],
+      uid: updateKey,
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
+      updatedAt: firebase.database.ServerValue.TIMESTAMP
+    }
+    update['userWishlistBooks/' + rootGetters[types.USER].id + '/books/' + updateKey] = newBook
+    await firebase.database().ref().update(update)
+    commit(types.ADD_ONE_BOOK_INTO_WISHLIST, { newBook }, { root: true })
   }
+}
+
+const CHECK_BOOK_IS_EXISTED_BY_ISBN = function (booksArray, book) {
+  return _.find(booksArray, function (e) {
+    return e.isbn10 === book.isbn10 || e.isbn13 === book.isbn13
+  })
 }

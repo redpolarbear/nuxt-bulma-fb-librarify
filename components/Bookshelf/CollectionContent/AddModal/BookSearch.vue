@@ -1,5 +1,5 @@
 <template>
-  <section class="section">
+  <section>
     <div class="field has-addons has-addons-centered">
       <p class="control"><a class="button is-static is-large"><span class="icon is-medium"><i class="fa fa-barcode fa-lg"></i></span></a></p>
       <p class="control">

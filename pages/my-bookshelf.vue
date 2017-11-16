@@ -42,10 +42,10 @@ export default {
     })
   },
   beforeDestroy () {
-    this.$store.commit(types.SET_COLLECTIONS, null)
-    this.$store.commit(types.SET_FAVORITE, null)
-    this.$store.commit(types.SET_WISHLIST, null)
-    this.$store.commit(types.SET_BOOKSHELF)
+    // this.$store.commit(types.SET_COLLECTIONS, null)
+    // this.$store.commit(types.SET_FAVORITE, null)
+    // this.$store.commit(types.SET_WISHLIST, null)
+    this.$store.commit(types.SET_BOOKSHELF, null)
   }
 }
 </script>

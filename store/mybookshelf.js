@@ -27,16 +27,28 @@ export const getters = {
 
 export const mutations = {
   SET_BOOKSHELF (state, payload) {
-    state.bookshelf = {
-      favorite: payload.favorite,
-      wishlist: payload.wishlist,
-      collections: payload.collections
+    if (payload !== null) {
+      state.bookshelf = {
+        favorite: payload.favorite,
+        wishlist: payload.wishlist,
+        collections: payload.collections
+      }
+    } else {
+      state.bookshelf = payload
     }
   },
   ADD_ONE_BOOK_INTO_COLLECTION (state, payload) {
     const targetCollectionIndex = _.findIndex(state.bookshelf.collections, function (e) { return e.uid === payload.collectionUid })
     state.bookshelf.collections[targetCollectionIndex]['books'].push(payload.newBook)
-    state.bookshelf.collections[targetCollectionIndex]['meta'].booksNo++
+    state.bookshelf.collections[targetCollectionIndex]['meta'].booksNo = _.size(state.bookshelf.collections[targetCollectionIndex]['books'])
+  },
+  ADD_ONE_BOOK_INTO_FAVORITE (state, payload) {
+    state.bookshelf.favorite['books'].push(payload.newBook)
+    state.bookshelf.favorite['meta'].booksNo = _.size(state.bookshelf.favorite['books'])
+  },
+  ADD_ONE_BOOK_INTO_WISHLIST (state, payload) {
+    state.bookshelf.wishlist['books'].push(payload.newBook)
+    state.bookshelf.wishlist['meta'].booksNo = _.size(state.bookshelf.wishlist['books'])
   },
   SET_COLLECTIONS (state, payload) {
     state.collections = payload
