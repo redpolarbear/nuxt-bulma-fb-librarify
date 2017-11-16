@@ -15,17 +15,12 @@
       <li>
         <nuxt-link to="/my-bookshelf/my-collections" active-class="is-active">My Collections</nuxt-link>
         <ul>
-          <template v-for="(item, index) in myBookshelf.collections">
-            <li :key="index">
-              <nuxt-link :to="`/my-bookshelf/${item.slug}`" active-class="is-active">{{ item.name }}</nuxt-link>
-            </li>
-          </template>
+          <li v-for="(item, index) in myBookshelf.collections" :key="index">
+            <nuxt-link :to="`/my-bookshelf/${item.slug}`" active-class="is-active">{{ item.name }}</nuxt-link>
+          </li>
         </ul>
       </li>
     </ul>
-    <p class="menu-label">
-      I'M BORROWING...
-    </p>
     <p class="menu-label">
       I'M LOOKING FOR...
     </p>
@@ -39,6 +34,9 @@
         </nuxt-link>
       </li>
     </ul>
+    <p class="menu-label">
+      I'M OFFERING...
+    </p>
   </aside>
 </template>
 

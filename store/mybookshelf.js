@@ -26,11 +26,11 @@ export const getters = {
 }
 
 export const mutations = {
-  SET_BOOKSHELF (state) {
+  SET_BOOKSHELF (state, payload) {
     state.bookshelf = {
-      favorite: state.favorite,
-      wishlist: state.wishlist,
-      collections: state.collections
+      favorite: payload.favorite,
+      wishlist: payload.wishlist,
+      collections: payload.collections
     }
   },
   ADD_ONE_BOOK_INTO_COLLECTION (state, payload) {
@@ -101,6 +101,46 @@ export const mutations = {
 }
 
 export const actions = {
+  async LOAD_MY_BOOKSHELF_ASYNC ({commit, rootGetters}) {
+    try {
+      const usersCollections = firebase.database().ref('userCollectionsBooks/' + rootGetters[types.USER].id).once('value')
+      const usersFavorite = firebase.database().ref('userFavoriteBooks/' + rootGetters[types.USER].id).once('value')
+      const usersWishlist = firebase.database().ref('userWishlistBooks/' + rootGetters[types.USER].id).once('value')
+      const usersBookshelf = await Promise.all([usersCollections, usersFavorite, usersWishlist])
+      const usersCollectionsArray = Object.entries(usersBookshelf[0].val()).map(e => Object.assign(
+        e[1],
+        {
+          meta: {
+            isEditing: false,
+            isExisted: false,
+            isChecked: false,
+            isLoading: false,
+            booksNo: e[1].books === null ? 0 : _.size(e[1].books)
+          }
+        },
+        {
+          books: e[1].books !== null ? _.orderBy(e[1].books, ['updatedAt'], ['desc']) : null
+        }
+      ))
+      const usersFavoriteObject = Object.assign(
+        usersBookshelf[1].val(),
+        { meta: {booksNo: usersBookshelf[1].val().books === null ? 0 : _.size(usersBookshelf[1].val().books)} },
+        { books: usersBookshelf[1].val().books === null ? null : _.orderBy(usersBookshelf[1].val().books, ['updatedAt'], ['desc']) }
+      )
+      const usersWishlistObject = Object.assign(
+        usersBookshelf[2].val(),
+        { meta: {booksNo: usersBookshelf[2].val().books === null ? 0 : _.size(usersBookshelf[2].val().books)} },
+        { books: usersBookshelf[2].val().books === null ? null : _.orderBy(usersBookshelf[2].val().books, ['updatedAt'], ['desc']) }
+      )
+      commit('SET_BOOKSHELF', {
+        favorite: usersFavoriteObject,
+        wishlist: usersWishlistObject,
+        collections: usersCollectionsArray
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  },
   async LOAD_MY_COLLECTIONS_ASYNC ({commit, rootGetters}) {
     try {
       const usersCollections = await firebase.database().ref('userCollectionsBooks/' + rootGetters[types.USER].id).once('value')

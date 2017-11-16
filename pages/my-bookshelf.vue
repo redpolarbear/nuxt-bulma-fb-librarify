@@ -29,11 +29,12 @@ export default {
     'app-bookshelf-menu': BookShelfMenuComponent
   },
   async asyncData ({store}) {
-    const myCollections = store.dispatch(types.ACTION_LOAD_MY_COLLECTIONS_ASYNC)
-    const myFavorite = store.dispatch(types.ACTION_LOAD_MY_FAVORITE_ASYNC)
-    const myWishlist = store.dispatch(types.ACTION_LOAD_MY_WISHLIST_ASYNC)
-    await Promise.all([myCollections, myFavorite, myWishlist])
-    store.commit(types.SET_BOOKSHELF)
+    await store.dispatch(types.ACTION_LOAD_MY_BOOKSHELF_ASYNC)
+    // const myCollections = store.dispatch(types.ACTION_LOAD_MY_COLLECTIONS_ASYNC)
+    // const myFavorite = store.dispatch(types.ACTION_LOAD_MY_FAVORITE_ASYNC)
+    // const myWishlist = store.dispatch(types.ACTION_LOAD_MY_WISHLIST_ASYNC)
+    // await Promise.all([myCollections, myFavorite, myWishlist])
+    // store.commit(types.SET_BOOKSHELF)
   },
   computed: {
     ...mapGetters({
