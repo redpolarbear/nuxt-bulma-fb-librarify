@@ -3,12 +3,16 @@ import _ from 'lodash'
 import firebase from '@/firebaseInit'
 
 export const state = () => ({
-  bookInfo: null
+  bookInfo: null,
+  isbnCode: ''
 })
 
 export const getters = {
   GET_BOOK_INFO: (state) => {
     return state.bookInfo
+  },
+  GET_ISBN_CODE: (state) => {
+    return state.isbnCode
   }
 }
 
@@ -34,6 +38,9 @@ export const mutations = {
     } else {
       state.bookInfo = payload
     }
+  },
+  SET_ISBN_CODE (state, payload) {
+    state.isbnCode = payload
   },
   SET_BOOK_INFO_UID (state, payload) {
     state.bookInfo.uid = payload.uid
