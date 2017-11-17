@@ -42,13 +42,13 @@ export default {
     async onSaveBookIntoCollection () {
       switch (this.collection.slug) {
         case 'my-favorite':
-          await this.$store.dispatch(types.ACTION_SAVE_THE_BOOK_INTO_FAVORITE_IN_FB)
+          await this.$store.dispatch(types.ACTION_SAVE_ONE_BOOK_INTO_FAVORITE_IN_FB)
           break
         case 'my-wishlist':
-          await this.$store.dispatch(types.ACTION_SAVE_THE_BOOK_INTO_WISHLIST_IN_FB)
+          await this.$store.dispatch(types.ACTION_SAVE_ONE_BOOK_INTO_WISHLIST_IN_FB)
           break
         default:
-          await this.$store.dispatch(types.ACTION_SAVE_THE_BOOK_INTO_COLLECTION_IN_FB, { collectionUid: this.collection.uid })
+          await this.$store.dispatch(types.ACTION_SAVE_ONE_BOOK_INTO_COLLECTION_IN_FB, { collectionUid: this.collection.uid })
           break
       }
       this.onDismissModal()
