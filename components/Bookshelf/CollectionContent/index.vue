@@ -36,14 +36,14 @@
       </nav>
     </div>
     <section class="secion">
-      <div class="columns is-multiline" style="align-items: flex-end;">
-        <div class="column is-narrow" v-for="item in content.books" :key="item.uid">
+      <div class="columns is-multiline" style="align-items: flex-end;" v-if="content.books !== undefined">
+        <div class="column is-narrow" v-for="(item, index) in content.books" :key="item.uid">
           <figure class="image" style="width: 122px;">
             <!-- <img src="https://bulma.io/images/placeholders/128x128.png"> -->
             <img :src="item.imageLinks.thumbnail" v-if="item.imageLinks.thumbnail">
             <div class="overlay">
               <div class="overlay-delete is-pulled-right">
-                <button class="delete is-small"></button>
+                <button class="delete is-small" @click="onDelete(index, item.uid)"></button>
               </div>
               <div class="content overlay-text has-text-centered is-size-7">
                 <a>{{ item.title }}</a>
@@ -73,45 +73,68 @@ export default {
   },
   data () {
     return {
-      content: {
-        type: 0 // type: 0 -> collection opened; type: 1 -> collections opened
-      },
+      field: {},
+      // type: 0, // type: 0 -> collection opened; type: 1 -> collections opened
+      // name: ''
+      // },
       showNewBookModal: false
     }
   },
   computed: {
     ...mapGetters({
       myBookshelf: types.BOOKSHELF
-    })
+    }),
+    content () {
+      if (this.field.type === 0) {
+        return this.myBookshelf[this.field.name] // object
+      } else if (this.field.type === 1) {
+        return { collections: this.myBookshelf[this.field.name] } // { key: array[] }
+      } else if (this.field.type === 2) {
+        return this.myBookshelf[this.field.name][this.field.collectionIndex] // object
+      }
+    }
   },
   created () {
-    this.content = { type: 0 }
+    this.field = { type: 0, name: '' }
     switch (this.$route.params.collectionName) {
       case 'my-favorite':
-        this.content = Object.assign(this.content, this.myBookshelf.favorite) // object
+        this.field.name = 'favorite'
         break
       case 'my-wishlist':
-        this.content = Object.assign(this.content, this.myBookshelf.wishlist) // object
+        this.field.name = 'wishlist'
         break
       case 'my-collections':
-        this.content.type = 1
-        this.content = Object.assign(this.content, { collections: this.myBookshelf.collections }) // array
+        this.field.name = 'collections'
+        this.field.type = 1
         break
       default:
-        this.content = Object.assign(this.content, this.loadContent(this.$route.params.collectionName)) // object - other customized collections
+        this.field.type = 2
+        this.field.name = 'collections'
+        this.field.collectionIndex = this.findCollectionIndex(this.$route.params.collectionName)
         break
     }
   },
   methods: {
-    loadContent (name) {
+    findCollectionIndex (name) {
       const myCollections = this.myBookshelf.collections
-      return myCollections.find(item => item.slug === name)
+      return myCollections.findIndex(item => item.slug === name)
     },
     toggleNewBookModal () {
       this.showNewBookModal = !this.showNewBookModal
     },
     toggleNewCollectionModal () {
       this.showNewCollectionModal = !this.showNewCollectionModal
+    },
+    async onDelete (index, bookUid) {
+      // this.$store.commit(types.REMOVE_ONE_BOOK_FROM_COLLECTION, {
+      //   collectionUid: this.content.uid,
+      //   index
+      // })
+      await this.$store.dispatch(types.ACTION_REMOVE_ONE_BOOK_FROM_COLLECTION_IN_FB, {
+        bookUid,
+        collectionUid: this.content.uid,
+        index
+      })
     }
   }
 }

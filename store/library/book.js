@@ -48,33 +48,6 @@ export const mutations = {
 }
 
 export const actions = {
-  async SEARCH_BOOK_BY_ISBN_IN_FB_ASYNC ({commit}, payload) { // payload = { isbn: isbn } - validated
-    let child = ''
-    if (payload.isbn.length === 10) {
-      child = 'isbn10'
-    } else if (payload.isbn.length === 13) {
-      child = 'isbn13'
-    }
-    try {
-      const bookSnapshot = await firebase.database().ref('books').orderByChild(child).equalTo(payload.isbn).once('value')
-      if (bookSnapshot.val()) {
-        bookSnapshot.forEach(childSnapshot => {
-          commit('SET_BOOK_INFO', Object.assign({}, childSnapshot.val()))
-          return true
-        })
-      } else {
-        commit('SET_BOOK_INFO', null)
-      }
-    } catch (error) {
-      // Handle Errors here.
-      // let errorCode = error.code
-      let errorMessage = error.message
-      // [START_EXCLUDE]
-      commit(types.SET_LOADING, false, { root: true })
-      commit(types.SET_ERROR, errorMessage, { root: true })
-      console.log(error)
-    }
-  },
   async SEARCH_BOOK_BY_ISBN_ASYNC ({commit}, payload) { // payload = { isbn: isbn } - validated
     const url = '/volumes'
     const params = {
@@ -103,25 +76,7 @@ export const actions = {
       console.log(error)
     }
   },
-  async SAVE_BOOK_INFO_INTO_FB_ASYNC ({getters, commit}) {
-    let newBookKey = firebase.database().ref('books').push().key
-    commit('SET_BOOK_INFO_UID', { uid: newBookKey })
-    let newBookInfo = {}
-    newBookInfo[newBookKey] = getters['GET_BOOK_INFO']
-    try {
-      await firebase.database().ref('books').update(newBookInfo)
-      commit(types.SET_LOADING, false, { root: true })
-    } catch (error) {
-      // Handle Errors here.
-      // let errorCode = error.code
-      let errorMessage = error.message
-      // [START_EXCLUDE]
-      commit(types.SET_LOADING, false, { root: true })
-      commit(types.SET_ERROR, errorMessage, { root: true })
-      console.log(error)
-    }
-  },
-  async SAVE_THE_BOOK_INTO_COLLECTION_IN_FB ({commit, rootGetters}, payload) {
+  async SAVE_ONE_BOOK_INTO_COLLECTION_IN_FB ({commit, rootGetters}, payload) {
     const collectionUid = payload.collectionUid
     // check if the book is existed
     const collectionBooks = await firebase.database().ref('userCollectionsBooks/' + rootGetters[types.USER].id + '/' + collectionUid).child('books').once('value')
@@ -146,7 +101,15 @@ export const actions = {
     await firebase.database().ref().update(update)
     commit(types.ADD_ONE_BOOK_INTO_COLLECTION, { collectionUid, newBook }, { root: true })
   },
-  async SAVE_THE_BOOK_INTO_FAVORITE_IN_FB ({commit, rootGetters}, payload) {
+  async REMOVE_ONE_BOOK_FROM_COLLECTION_IN_FB ({ commit, rootGetters }, payload) {
+    const collectionUid = payload.collectionUid
+    // the collection is empty or never collect this book into this collection
+    let update = {}
+    update['userCollectionsBooks/' + rootGetters[types.USER].id + '/' + collectionUid + '/books/' + payload.bookUid] = null
+    await firebase.database().ref().update(update)
+    commit(types.REMOVE_ONE_BOOK_FROM_COLLECTION, { collectionUid, index: payload.index }, { root: true })
+  },
+  async SAVE_ONE_BOOK_INTO_FAVORITE_IN_FB ({commit, rootGetters}, payload) {
     const favoriteBooks = await firebase.database().ref('userFavoriteBooks/' + rootGetters[types.USER].id).child('books').once('value')
     if (favoriteBooks.val()) {
       const favoriteBooksArray = Object.entries(favoriteBooks.val()).map(e => Object.assign({}, e[1]))
@@ -170,7 +133,7 @@ export const actions = {
     await firebase.database().ref().update(update)
     commit(types.ADD_ONE_BOOK_INTO_FAVORITE, { newBook }, { root: true })
   },
-  async SAVE_THE_BOOK_INTO_WISHLIST_IN_FB ({state, commit, rootGetters}, payload) {
+  async SAVE_ONE_BOOK_INTO_WISHLIST_IN_FB ({state, commit, rootGetters}, payload) {
     const favoriteBooks = await firebase.database().ref('userWishlistBooks/' + rootGetters[types.USER].id).child('books').once('value')
     if (favoriteBooks.val()) {
       const favoriteBooksArray = Object.entries(favoriteBooks.val()).map(e => Object.assign({}, e[1]))

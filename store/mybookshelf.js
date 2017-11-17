@@ -50,6 +50,17 @@ export const mutations = {
     state.bookshelf.wishlist['books'].unshift(payload.newBook)
     state.bookshelf.wishlist['meta'].booksNo = _.size(state.bookshelf.wishlist['books'])
   },
+  REMOVE_ONE_BOOK_FROM_COLLECTION (state, payload) {
+    const targetCollectionIndex = _.findIndex(state.bookshelf.collections, function (e) { return e.uid === payload.collectionUid })
+    state.bookshelf.collections[targetCollectionIndex]['books'].splice(payload.index, 1)
+    state.bookshelf.collections[targetCollectionIndex]['meta'].booksNo = _.size(state.bookshelf.collections[targetCollectionIndex]['books'])
+  },
+  REMOVE_ONE_BOOK_FROM_FAVORITE () {
+
+  },
+  REMOVE_ONE_BOOK_FROM_WISHLIST () {
+
+  },
   SET_COLLECTIONS (state, payload) {
     state.collections = payload
   },
