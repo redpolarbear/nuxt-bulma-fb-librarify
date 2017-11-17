@@ -3,7 +3,7 @@
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title has-text-justified is-flex">
+        <p class="modal-card-title has-text-justified is-inline-flex">
           <span class="icon is-medium"><i class="fa fa-folder-open fa-lg" aria-hidden="true"></i></span>&nbsp;{{ collection.name }}</p>
         <button class="delete" aria-label="close" @click="onDismissModal"></button>
       </header>
@@ -13,7 +13,7 @@
       </section>
       <footer class="modal-card-foot is-inline-block has-text-right">
         <button class="button" @click="onDismissModal">Cancel</button>
-        <button class="button is-success" @click="onSaveBookIntoCollection">Save</button>
+        <button class="button is-success" @click="onSaveBookIntoCollection" v-bind:disabled="!getBookInfo">Save</button>
       </footer>
     </div>
   </div>
@@ -21,12 +21,18 @@
 
 <script>
 import * as types from '@/types'
+import { mapGetters } from 'vuex'
 
 import BookInfoBoxComponent from './BookInfobox'
 import BookSearchComponent from './BookSearch'
 
 export default {
   name: 'newBookModal',
+  computed: {
+    ...mapGetters({
+      getBookInfo: types.BOOK_INFO
+    })
+  },
   components: {
     'app-bookinfo-box': BookInfoBoxComponent,
     'app-book-search': BookSearchComponent
@@ -45,11 +51,12 @@ export default {
           await this.$store.dispatch(types.ACTION_SAVE_THE_BOOK_INTO_COLLECTION_IN_FB, { collectionUid: this.collection.uid })
           break
       }
+      this.onDismissModal()
     },
     onDismissModal () {
       this.$emit('dismissNewBookModal', false)
       this.$store.commit(types.SET_BOOK_INFO, null)
-      this.isbnCode = null
+      this.$store.commit(types.SET_ISBN_CODE, null)
     }
   }
 }
