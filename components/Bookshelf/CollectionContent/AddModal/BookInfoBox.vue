@@ -10,15 +10,15 @@
         <div class="media-content">
           <div class="content">
             <h4>
-              <strong>{{ getBookInfo.title }}<span v-if="getBookInfo.subtitle">: {{ getBookInfo.subtitle }}</span></strong><br>
+              <strong>{{getBookInfo.title}}<span v-if="getBookInfo.subtitle">: {{getBookInfo.subtitle}}</span></strong><br>
             </h4>
-            <p>by {{ getBookInfo.authors.join(', ') }} <span class="has-text-grey"> (Author)</span></p>
+            <p v-if="getBookInfo.authors">by {{ getBookInfo.authors ? getBookInfo.authors.join(', ') : null }} <span class="has-text-grey"> (Author)</span></p>
             <ul style="list-style-type: none; margin-left: 0px; font-size: 15px;">
-              <li><strong>Pages:</strong> {{getBookInfo.pageCount}}</li>
-              <li><strong>Publisher:</strong> {{getBookInfo.publisher}} <span class="has-text-grey">({{ getBookInfo.publishedDate}})</span></li>
-              <li><strong>Language:</strong> {{language}}</li>
-              <li><strong>ISBN10:</strong> {{getBookInfo.isbn10}}</li>
-              <li><strong>ISBN13:</strong> {{getBookInfo.isbn13}}</li>
+              <li v-if="getBookInfo.pageCount"><strong>Pages:</strong> {{getBookInfo.pageCount}}</li>
+              <li v-if="getBookInfo.publisher && getBookInfo.publishedDate"><strong>Publisher:</strong> {{getBookInfo.publisher}} <span class="has-text-grey">({{ getBookInfo.publishedDate}})</span></li>
+              <li v-if="language"><strong>Language:</strong> {{language}}</li>
+              <li v-if="getBookInfo.isbn10"><strong>ISBN10:</strong> {{getBookInfo.isbn10}}</li>
+              <li v-if="getBookInfo.isbn13"><strong>ISBN13:</strong> {{getBookInfo.isbn13}}</li>
               <li v-if="dimensions"><strong>Product Dimensions:</strong> {{ dimensions }}</li>
               <!-- <li><strong>Description:</strong>
                 <p v-html="getBookInfo.description" class="has-text-grey"></p>
