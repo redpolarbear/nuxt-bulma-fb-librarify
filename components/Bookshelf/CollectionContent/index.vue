@@ -35,8 +35,26 @@
         </div>
       </nav>
     </div>
-    this is from component {{ $route.params.collectionName }}
-    {{ content }}
+    <section class="secion">
+      <div class="columns is-multiline" style="align-items: flex-end;">
+        <div class="column is-narrow" v-for="item in content.books" :key="item.uid">
+          <figure class="image" style="width: 122px;">
+            <!-- <img src="https://bulma.io/images/placeholders/128x128.png"> -->
+            <img :src="item.imageLinks.thumbnail" v-if="item.imageLinks.thumbnail">
+            <div class="overlay">
+              <div class="overlay-delete is-pulled-right">
+                <button class="delete is-small"></button>
+              </div>
+              <div class="content overlay-text has-text-centered is-size-7">
+                <a>{{ item.title }}</a>
+              </div>
+            </div>
+          </figure>
+        </div>
+      </div>
+      <!-- this is from component {{ $route.params.collectionName }}
+      {{ content }} -->
+    </section>
   </div>
 </template>
 
@@ -58,8 +76,7 @@ export default {
       content: {
         type: 0 // type: 0 -> collection opened; type: 1 -> collections opened
       },
-      showNewBookModal: false,
-      showNewCollectionModal: false
+      showNewBookModal: false
     }
   },
   computed: {
@@ -101,5 +118,33 @@ export default {
 </script>
 
 <style scoped>
-
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  /* background-color: #008CBA; */
+  background-color: hsl(204, 86%, 53%)
+}
+figure.image:hover .overlay {
+  opacity: 0.9;
+}
+.overlay-text a {
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+.overlay-delete button.delete {
+  margin-right: -5px;
+  margin-top: -5px;
+  background-color: hsl(348, 100%, 61%);
+}
 </style>
