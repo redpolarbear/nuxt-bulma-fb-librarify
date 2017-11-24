@@ -103,7 +103,6 @@ export const actions = {
   },
   async REMOVE_ONE_BOOK_FROM_COLLECTION_IN_FB ({ commit, rootGetters }, payload) {
     const collectionUid = payload.collectionUid
-    // the collection is empty or never collect this book into this collection
     let update = {}
     update['userCollectionsBooks/' + rootGetters[types.USER].id + '/' + collectionUid + '/books/' + payload.bookUid] = null
     await firebase.database().ref().update(update)
@@ -156,6 +155,21 @@ export const actions = {
     update['userWishlistBooks/' + rootGetters[types.USER].id + '/books/' + updateKey] = newBook
     await firebase.database().ref().update(update)
     commit(types.ADD_ONE_BOOK_INTO_WISHLIST, { newBook }, { root: true })
+  },
+  async REMOVE_ONE_BOOK_FROM_OBJECT_IN_FB ({ commit, rootGetters }, payload) {
+    let docName = ''
+    switch (payload.docName) {
+      case 'favorite':
+        docName = 'userFavoriteBooks'
+        break
+      case 'wishlist':
+        docName = 'userWishlistBooks'
+        break
+    }
+    let update = {}
+    update[docName + '/' + rootGetters[types.USER].id + '/books/' + payload.bookUid] = null
+    await firebase.database().ref().update(update)
+    commit(types.REMOVE_ONE_BOOK_FROM_OBJECT, { docName: payload.docName, index: payload.index }, { root: true })
   }
 }
 

@@ -55,11 +55,9 @@ export const mutations = {
     state.bookshelf.collections[targetCollectionIndex]['books'].splice(payload.index, 1)
     state.bookshelf.collections[targetCollectionIndex]['meta'].booksNo = _.size(state.bookshelf.collections[targetCollectionIndex]['books'])
   },
-  REMOVE_ONE_BOOK_FROM_FAVORITE () {
-
-  },
-  REMOVE_ONE_BOOK_FROM_WISHLIST () {
-
+  REMOVE_ONE_BOOK_FROM_OBJECT (state, payload) {
+    state.bookshelf[payload.docName]['books'].splice(payload.index, 1)
+    state.bookshelf[payload.docName]['meta'].booksNo = _.size(state.bookshelf[payload.docName]['books'])
   },
   SET_COLLECTIONS (state, payload) {
     state.collections = payload
