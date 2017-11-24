@@ -1,5 +1,5 @@
 <template>
-  <div class="modal" v-bind:class="{ 'is-active': showNewBookModal }">
+  <div class="modal" v-bind:class="{ 'is-active': showAddBookModal }">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
@@ -27,7 +27,7 @@ import BookInfoBoxComponent from './BookInfobox'
 import BookSearchComponent from './BookSearch'
 
 export default {
-  name: 'newBookModal',
+  name: 'addBookModal',
   computed: {
     ...mapGetters({
       getBookInfo: types.BOOK_INFO
@@ -37,7 +37,7 @@ export default {
     'app-bookinfo-box': BookInfoBoxComponent,
     'app-book-search': BookSearchComponent
   },
-  props: [ 'collection', 'showNewBookModal' ],
+  props: [ 'collection', 'showAddBookModal' ],
   methods: {
     async onSaveBookIntoCollection () {
       switch (this.collection.slug) {
@@ -54,7 +54,7 @@ export default {
       this.onDismissModal()
     },
     onDismissModal () {
-      this.$emit('dismissNewBookModal', false)
+      this.$emit('dismissAddBookModal', false)
       this.$store.commit(types.SET_BOOK_INFO, null)
       this.$store.commit(types.SET_ISBN_CODE, null)
     }

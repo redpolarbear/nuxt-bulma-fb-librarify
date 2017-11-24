@@ -1,6 +1,6 @@
 <template>
   <div>
-    this the page for the /my-bookshelf
+
   </div>
 </template>
 
@@ -9,6 +9,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>
