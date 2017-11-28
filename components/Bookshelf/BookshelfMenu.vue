@@ -16,7 +16,12 @@
         <nuxt-link to="/my-bookshelf/my-collections" active-class="is-active">My Collections</nuxt-link>
         <ul>
           <li v-for="(item, index) in myBookshelf.collections" :key="index">
-            <nuxt-link :to="`/my-bookshelf/${item.slug}`" active-class="is-active">{{ item.name }}</nuxt-link>
+            <nuxt-link :to="`/my-bookshelf/${item.slug}`" active-class="is-active">
+              <span class="icon has-text-">
+                <i class="fa" v-bind:class="{ 'fa-folder-open-o': $route.params.collectionName === item.slug, 'fa-folder-o': $route.params.collectionName !== item.slug }"></i>
+              </span>
+              {{ item.name }}
+            </nuxt-link>
           </li>
         </ul>
       </li>
