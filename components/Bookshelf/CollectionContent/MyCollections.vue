@@ -34,13 +34,21 @@
           <div class="card">
             <header class="card-header">
               <p class="card-header-title">
-                {{ item. name }}
+                <span class="icon">
+                  <i class="fa fa-folder" aria-hidden="true"></i>
+                </span>&nbsp;
+                {{ item.name }}
               </p>
-              <a href="#" class="card-header-icon" aria-label="more options">
+              <p class="card-header-icon">
+                <span class="card-header-icon-books-number">
+                  {{ item.meta.booksNo }}
+                </span>
+              </p>
+              <!-- <a href="#" class="card-header-icon" aria-label="more options">
                 <span class="icon">
                   <i class="fa fa-angle-down" aria-hidden="true"></i>
                 </span>
-              </a>
+              </a> -->
             </header>
             <div class="card-content">
               <div class="content">
@@ -49,23 +57,20 @@
               </div>
             </div>
             <footer class="card-footer">
+              <nuxt-link :to="`/my-bookshelf/${item.slug}`" class="card-footer-item">
+                <span class="icon">
+                  <i class="fa fa-folder-open-o fa-lg" aria-hidden="true"></i>
+                </span>
+              </nuxt-link>
               <a href="#" class="card-footer-item">
                 <span class="icon">
-                  <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                  <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
                 </span>
-                Open
               </a>
-              <a href="#" class="card-footer-item">
+              <a class="card-footer-item has-text-danger">
                 <span class="icon">
-                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                </span>
-                Edit
-              </a>
-              <a href="#" class="card-footer-item has-text-danger">
-                <span class="icon">
-                  <i class="fa fa-trash" aria-hidden="true"></i>
+                  <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
                 </span>                
-                Delete
               </a>
             </footer>
           </div>
@@ -110,5 +115,16 @@ export default {
 </script>
 
 <style scoped>
-
+.card-header-icon {
+  cursor: auto;
+}
+span.card-header-icon-books-number {
+  background-color: rgb(255, 56, 96);
+  border-radius: 0.5rem;
+  color: #fff;
+  display: inline-block;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-align: center;
+}
 </style>
