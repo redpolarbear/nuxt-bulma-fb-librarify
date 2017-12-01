@@ -11,7 +11,7 @@
       </header> -->
       <section class="modal-card-body">
         <div class="field">
-          <label class="label">Collection Name</label>
+          <label class="label">Collection Name <span class="has-text-danger">*</span></label>
           <div class="control">
             <input class="input" 
               type="text" 
@@ -94,15 +94,13 @@ export default {
     },
     onDismissModal () {
       this.$emit('dismissAddCollectionModal', false)
+      this.$v.collection.$reset()
     },
     async onSave () { // TODO: check if the name.trim() is existed
       if (!this.$v.collection.$error && !this.$v.collection.$invalid) {
         await this.$store.dispatch(types.ACTION_SAVE_ONE_COLLECTION_INTO_FB, this.collection)
         this.onDismissModal()
       }
-    },
-    async isNameUnique () {
-      await this.$store.dispatch(types.ACTION_IS_COLLECTION_NAME_UNIQUE)
     }
   }
 }
