@@ -20,7 +20,7 @@
                   ]"
                   type="text" 
                   placeholder="First Name"
-                  v-model="form.firstName"
+                  v-model.trim="form.firstName"
                   @input="$v.form.firstName.$touch()"
                   @blur="$v.form.firstName.$touch()">
                 <span class="icon is-small is-right" v-if="!$v.form.firstName.$error && !$v.form.firstName.$invalid">
@@ -44,7 +44,7 @@
                   ]"
                   type="text" 
                   placeholder="Last Name"
-                  v-model="form.lastName"
+                  v-model.trim="form.lastName"
                   @input="$v.form.lastName.$touch()"
                   @blur="$v.form.lastName.$touch()">
                 <span class="icon is-small is-right" v-if="!$v.form.lastName.$error && !$v.form.lastName.$invalid">
@@ -74,7 +74,7 @@
                   ]"
                   type="email" 
                   placeholder="Email"
-                  v-model="form.email"
+                  v-model.trim="form.email"
                   @input="$v.form.email.$touch()"
                   @blur="$v.form.email.$touch()">
                 <span class="icon is-small is-right" v-if="!$v.form.email.$error && !$v.form.email.$invalid">

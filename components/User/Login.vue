@@ -19,7 +19,7 @@
                   ]"
                   type="email" 
                   placeholder="Your Email"
-                  v-model="form.email"
+                  v-model.trim="form.email"
                   @input="$v.form.email.$touch()"
                   @blur="$v.form.email.$touch()">
                 <span class="icon is-small is-right" v-if="!$v.form.email.$error && !$v.form.email.$invalid">
