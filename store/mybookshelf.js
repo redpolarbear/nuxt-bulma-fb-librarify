@@ -160,8 +160,8 @@ export const actions = {
         { books: usersBookshelf[2].val().books === null ? null : _.orderBy(usersBookshelf[2].val().books, ['createdAt'], ['desc']) }
       )
       commit('SET_BOOKSHELF', {
-        favorite: _.orderBy(usersFavoriteObject, ['createdAt'], ['desc']),
-        wishlist: _.orderBy(usersWishlistObject, ['createdAt'], ['desc']),
+        favorite: usersFavoriteObject,
+        wishlist: usersWishlistObject,
         collections: _.concat(_.take(usersCollectionsArray, 2), _.orderBy(_.slice(usersCollectionsArray, 2), ['createdAt'], ['desc']))
       })
     } catch (error) {
