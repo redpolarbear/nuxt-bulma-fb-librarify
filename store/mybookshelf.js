@@ -75,6 +75,7 @@ export const mutations = {
     state.collections.push({
       name: '',
       slug: '',
+      desc: '',
       meta: {
         booksNo: 0,
         isChecked: false,
@@ -88,8 +89,13 @@ export const mutations = {
     state.collections.splice(payload.index, 1)
   },
   UPDATE_ONE_COLLECTION (state, payload) {
-    state.collections[payload.index] = Object.assign({}, _.omit(payload, 'index'))
-    state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
+    if (payload.index) { // update a collection
+      state.bookshelf.collections.splice(payload.index, 1, Object.assign({}, _.omit(payload, 'index')))
+    } else { // new a collection
+      state.bookshelf.collections.splice(2, 0, Object.assign({}, _.omit(payload, 'index')))
+    }
+    // state.collections[payload.index] = Object.assign({}, _.omit(payload, 'index'))
+    // state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
   },
   UPDATE_ONE_COLLECTION_NAME (state, payload) {
     state.collections[payload.index].collection.name = payload.collection.name
@@ -140,23 +146,23 @@ export const actions = {
           }
         },
         {
-          books: e[1].books !== null ? _.orderBy(e[1].books, ['updatedAt'], ['desc']) : null
+          books: e[1].books !== null ? _.orderBy(e[1].books, ['createdAt'], ['desc']) : null
         }
       ))
       const usersFavoriteObject = Object.assign(
         usersBookshelf[1].val(),
         { meta: {booksNo: usersBookshelf[1].val().books === null ? 0 : _.size(usersBookshelf[1].val().books)} },
-        { books: usersBookshelf[1].val().books === null ? null : _.orderBy(usersBookshelf[1].val().books, ['updatedAt'], ['desc']) }
+        { books: usersBookshelf[1].val().books === null ? null : _.orderBy(usersBookshelf[1].val().books, ['createdAt'], ['desc']) }
       )
       const usersWishlistObject = Object.assign(
         usersBookshelf[2].val(),
         { meta: {booksNo: usersBookshelf[2].val().books === null ? 0 : _.size(usersBookshelf[2].val().books)} },
-        { books: usersBookshelf[2].val().books === null ? null : _.orderBy(usersBookshelf[2].val().books, ['updatedAt'], ['desc']) }
+        { books: usersBookshelf[2].val().books === null ? null : _.orderBy(usersBookshelf[2].val().books, ['createdAt'], ['desc']) }
       )
       commit('SET_BOOKSHELF', {
-        favorite: usersFavoriteObject,
-        wishlist: usersWishlistObject,
-        collections: usersCollectionsArray
+        favorite: _.orderBy(usersFavoriteObject, ['createdAt'], ['desc']),
+        wishlist: _.orderBy(usersWishlistObject, ['createdAt'], ['desc']),
+        collections: _.concat(_.take(usersCollectionsArray, 2), _.orderBy(_.slice(usersCollectionsArray, 2), ['createdAt'], ['desc']))
       })
     } catch (error) {
       console.log(error)
@@ -208,30 +214,56 @@ export const actions = {
     }
   },
   async SAVE_ONE_COLLECTION_INTO_FB ({state, commit, rootGetters}, payload) { // TODO: try {} catch (error) {}
-    commit('ENABLE_COLLECTION_LOADING', { index: payload.index })
-    let collectionKey = ''
-    let collection = {}
-    if (payload.uid) { // modify the name of the collection
-      collectionKey = payload.uid
-      collection[collectionKey] = {
-        ..._.omit(payload, [ 'index', 'meta' ]),
-        slug: slug(payload.name),
-        updatedAt: firebase.database.ServerValue.TIMESTAMP
+    try {
+      let collectionKey = ''
+      let collection = {}
+      if (payload.uid) { // modify the name of the collection
+        collectionKey = payload.uid
+        collection[collectionKey] = {
+          ..._.omit(payload, [ 'index', 'meta' ]),
+          name: payload.name,
+          slug: slug(payload.name.toLowerCase()),
+          desc: payload.desc,
+          updatedAt: firebase.database.ServerValue.TIMESTAMP
+        }
+      } else { // add the new collection
+        collectionKey = firebase.database().ref('userCollectionsBooks/' + rootGetters[types.USER].id).push().key
+        collection[collectionKey] = {
+          name: payload.name,
+          desc: payload.desc,
+          slug: slug(payload.name.toLowerCase()),
+          uid: collectionKey,
+          createdAt: firebase.database.ServerValue.TIMESTAMP,
+          updatedAt: firebase.database.ServerValue.TIMESTAMP
+        }
       }
-    } else { // add the new collection
-      collectionKey = firebase.database().ref('userCollectionsBooks/' + rootGetters[types.USER].id).push().key
-      collection[collectionKey] = {
-        name: payload.name,
-        slug: slug(payload.name),
-        uid: collectionKey,
-        createdAt: firebase.database.ServerValue.TIMESTAMP,
-        updatedAt: firebase.database.ServerValue.TIMESTAMP
-      }
+      await firebase.database().ref('userCollectionsBooks').child(rootGetters[types.USER].id).update(collection)
+      commit('UPDATE_ONE_COLLECTION', Object.assign(
+        { index: payload.index || null },
+        collection[collectionKey],
+        { meta: payload.meta || {
+          isEditing: false,
+          isExisted: false,
+          isChecked: false,
+          isLoading: false,
+          booksNo: 0
+        }}))
+    } catch (error) {
+      console.log(error)
     }
-    await firebase.database().ref('userCollectionsBooks').child(rootGetters[types.USER].id).update(collection)
-    commit('UPDATE_ONE_COLLECTION', Object.assign({ index: payload.index }, collection[collectionKey], { meta: payload.meta }))
-    commit('DISABLE_COLLECTION_EDITING', { index: payload.index })
-    commit('TOGGLE_COLLECTION_ISEXISTED', { index: payload.index, switch: false })
-    commit('DISABLE_COLLECTION_LOADING', { index: payload.index })
+    // commit('DISABLE_COLLECTION_EDITING', { index: payload.index })
+    // commit('TOGGLE_COLLECTION_ISEXISTED', { index: payload.index, switch: false })
+    // commit('DISABLE_COLLECTION_LOADING', { index: payload.index })
+  },
+  async IS_COLLECTION_NAME_UNIQUE ({ rootGetters }, payload) {
+    const myCollections = await firebase.database().ref('userCollectionsBooks').child(rootGetters[types.USER].id).orderByChild('updatedAt').once('value')
+    return new Promise((resolve, reject) => {
+      myCollections.forEach((item) => {
+        if (item.val().name.trim() === payload.name && item.val().uid !== payload.uid) {
+          resolve(false)
+        }
+      })
+      resolve(true)
+    })
   }
 }
