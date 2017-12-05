@@ -64,7 +64,6 @@ export default {
         async isUnique (value) {
           if (value === '') return true
           const result = await this.$store.dispatch(types.ACTION_IS_COLLECTION_NAME_UNIQUE, { name: value, uid: this.collection.uid || null })
-          console.log(result)
           return Boolean(result)
         }
       },

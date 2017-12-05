@@ -72,7 +72,8 @@
               </a>
               <a class="card-footer-item" v-bind:class="{
                 'is-disabled': item.slug === 'my-reading-collection' || item.slug === 'my-have-read-collection' || item.meta.booksNo > 0,
-                'has-text-danger': item.slug !== 'my-reading-collection' && item.slug !== 'my-have-read-collection'}">
+                'has-text-danger': item.slug !== 'my-reading-collection' && item.slug !== 'my-have-read-collection' && item.meta.booksNo === 0}" 
+                @click="deleteCollection(item, index)">
                 <span class="icon">
                   <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
                 </span>                
@@ -122,6 +123,10 @@ export default {
     editCollection (item, index) {
       this.collectionItem = Object.assign({ index }, item)
       this.showAddCollectionModal = !this.showAddCollectionModal
+    },
+    async deleteCollection (item, index) {
+      const removeCollectionItem = Object.assign({index}, item)
+      await this.$store.dispatch(types.ACTION_REMOVE_ONE_COLLECTION_FROM_FB, removeCollectionItem)
     },
     dismissCollectionModal (event) {
       this.showAddCollectionModal = event

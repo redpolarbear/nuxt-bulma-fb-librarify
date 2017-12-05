@@ -71,22 +71,22 @@ export const mutations = {
   CLEAR_COLLECTIONS (state) {
     state.collections = []
   },
-  ADD_ONE_EMPTY_COLLECTION (state) {
-    state.collections.push({
-      name: '',
-      slug: '',
-      desc: '',
-      meta: {
-        booksNo: 0,
-        isChecked: false,
-        isEditing: true,
-        isExisted: false,
-        isLoading: false
-      }
-    })
-  },
+  // ADD_ONE_EMPTY_COLLECTION (state) {
+  //   state.collections.push({
+  //     name: '',
+  //     slug: '',
+  //     desc: '',
+  //     meta: {
+  //       booksNo: 0,
+  //       isChecked: false,
+  //       isEditing: true,
+  //       isExisted: false,
+  //       isLoading: false
+  //     }
+  //   })
+  // },
   REMOVE_ONE_COLLECTION (state, payload) {
-    state.collections.splice(payload.index, 1)
+    state.bookshelf.collections.splice(payload.index, 1)
   },
   UPDATE_ONE_COLLECTION (state, payload) {
     if (payload.index) { // update a collection
@@ -94,37 +94,35 @@ export const mutations = {
     } else { // new a collection
       state.bookshelf.collections.splice(2, 0, Object.assign({}, _.omit(payload, 'index')))
     }
-    // state.collections[payload.index] = Object.assign({}, _.omit(payload, 'index'))
-    // state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
-  },
-  UPDATE_ONE_COLLECTION_NAME (state, payload) {
-    state.collections[payload.index].collection.name = payload.collection.name
-    state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
-  },
-  ENABLE_COLLECTION_EDITING (state, payload) {
-    state.collections[payload.index].meta.isEditing = true
-    state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
-  },
-  DISABLE_COLLECTION_EDITING (state, payload) {
-    state.collections[payload.index].meta.isEditing = false
-    state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
-  },
-  TOGGLE_COLLECTION_CHECK (state, payload) {
-    state.collections[payload.index].meta.isChecked = !state.collections[payload.index].meta.isChecked
-    state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
-  },
-  TOGGLE_COLLECTION_ISEXISTED (state, payload) {
-    state.collections[payload.index].meta.isExisted = payload.switch
-    state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
-  },
-  ENABLE_COLLECTION_LOADING (state, payload) {
-    state.collections[payload.index].meta.isLoading = true
-    state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
-  },
-  DISABLE_COLLECTION_LOADING (state, payload) {
-    state.collections[payload.index].meta.isLoading = false
-    state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
   }
+  // UPDATE_ONE_COLLECTION_NAME (state, payload) {
+  //   state.collections[payload.index].collection.name = payload.collection.name
+  //   state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
+  // },
+  // ENABLE_COLLECTION_EDITING (state, payload) {
+  //   state.collections[payload.index].meta.isEditing = true
+  //   state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
+  // },
+  // DISABLE_COLLECTION_EDITING (state, payload) {
+  //   state.collections[payload.index].meta.isEditing = false
+  //   state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
+  // },
+  // TOGGLE_COLLECTION_CHECK (state, payload) {
+  //   state.collections[payload.index].meta.isChecked = !state.collections[payload.index].meta.isChecked
+  //   state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
+  // },
+  // TOGGLE_COLLECTION_ISEXISTED (state, payload) {
+  //   state.collections[payload.index].meta.isExisted = payload.switch
+  //   state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
+  // },
+  // ENABLE_COLLECTION_LOADING (state, payload) {
+  //   state.collections[payload.index].meta.isLoading = true
+  //   state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
+  // },
+  // DISABLE_COLLECTION_LOADING (state, payload) {
+  //   state.collections[payload.index].meta.isLoading = false
+  //   state.collections = [...state.collections.slice(0, payload.index), state.collections[payload.index], ...state.collections.slice(payload.index + 1)]
+  // }
 }
 
 export const actions = {
@@ -229,6 +227,7 @@ export const actions = {
       } else { // add the new collection
         collectionKey = firebase.database().ref('userCollectionsBooks/' + rootGetters[types.USER].id).push().key
         collection[collectionKey] = {
+          books: [],
           name: payload.name,
           desc: payload.desc,
           slug: slug(payload.name.toLowerCase()),
@@ -265,5 +264,13 @@ export const actions = {
       })
       resolve(true)
     })
+  },
+  async REMOVE_ONE_COLLECTION_FROM_FB ({ rootGetters, commit }, payload) {
+    try {
+      await firebase.database().ref('userCollectionsBooks/' + rootGetters[types.USER].id + '/' + payload.uid).remove()
+      commit('REMOVE_ONE_COLLECTION', payload)
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
